@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Itim&family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    font-family: "Poppins", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    font-weight: 300;
+    font-style: normal;
+}
+
+#Categories::after {
+    all: unset;
+}
+
+.swiper {
+    width: 100%;
+    overflow: visible;
+}
+
+.swiper-slide {
+    font-size: 18px;
+    box-shadow: 0 0 10px gray;
+    margin-block: 20px;
+    border-radius: 10px;
+    min-height: 400px;
+    overflow: hidden;
+}
+@media  screen and (min-width:1556px){
+    .swiper-slide {
+        min-height: 500px;
+    }
+}
+
+.swiper-slide img {
+    /* cursor: grab; */
+    display: block;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+.swiper-slide:hover {
+    cursor: pointer;
+}
+.mySwiper .swiper-button-next,
+.mySwiper .swiper-button-prev {
+    color: #000; /* Change to preferred color */
+    display: block !important;
+    z-index: 10; /* Ensure they are above other elements */
+}
+.bg-yellow {
+    background: #f29d00;
+}
+.bg-yellow:hover {
+    background: #eaa930;
+}
+.text-yellow {
+    color: #f29d00;
+}
+@media (max-width: 768px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      display: none;
+    }
+  }
+.top-bg {
+    background-color: #05006E;
+}
+.accordion-item:last-of-type {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.accordion-item:first-of-type {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.accordion-item button:focus{
+    box-shadow: 0 5px 10px gray;
+    background-color: transparent;
+}
+.accordion-collapse {
+    visibility: visible;
+}
+.accordion-button:not(.collapsed) {
+    color: black;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+@media screen and (min-width:1556px){
+    select div {
+        font-size: 30px;
+    }
+}

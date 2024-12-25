@@ -1,0 +1,22 @@
+export const countries = [
+    { name: "lot24.pl", flag: "https://flagcdn.com/w320/pl.png" },
+    { name: "lot24.co.uk", flag: "https://flagcdn.com/w320/gb.png" },
+    { name: "lot24.ru", flag: "https://flagcdn.com/w320/ru.png" },
+    { name: "lot24.ch", flag: "https://flagcdn.com/w320/ch.png" },
+    { name: "lot24.ro", flag: "https://flagcdn.com/w320/ro.png" },
+    { name: "lot24.be", flag: "https://flagcdn.com/w320/be.png" },
+    { name: "lot24.hu", flag: "https://flagcdn.com/w320/hu.png" },
+    { name: "lot24.ee", flag: "https://flagcdn.com/w320/ee.png" },
+    { name: "lot24.hr", flag: "https://flagcdn.com/w320/hr.png" },
+    { name: "lot24.de", flag: "https://flagcdn.com/w320/de.png" },
+    { name: "lot24.fr", flag: "https://flagcdn.com/w320/fr.png" },
+    { name: "lot24.gr", flag: "https://flagcdn.com/w320/gr.png" },
+    { name: "lot24.cz", flag: "https://flagcdn.com/w320/cz.png" },
+    { name: "lot24.sk", flag: "https://flagcdn.com/w320/sk.png" },
+    { name: "lot24.it", flag: "https://flagcdn.com/w320/it.png" },
+    { name: "lot24.in", flag: "https://flagcdn.com/w320/in.png" },
+    { name: "lot24.lv", flag: "https://flagcdn.com/w320/lv.png" },
+    { name: "lot24.pt", flag: "https://flagcdn.com/w320/pt.png" },
+    { name: "lot24.dk", flag: "https://flagcdn.com/w320/dk.png" },
+    { name: "lot24.us", flag: "https://flagcdn.com/w320/us.png" }
+];
