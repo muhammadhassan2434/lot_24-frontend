@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CategoryItem from "./CategoryItem";
-import { categories } from "../../utils/data";
+// import { categories } from "../../utils/data";
 
 const Category = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

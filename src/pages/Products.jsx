@@ -21,7 +21,8 @@ const Products = () => {
       const response = await axios.get(
         `https://api.lot24.ma/api/search/category/${categoryId}`
       );
-      setProducts(response.data);
+      console.log(response.data.data.products)
+      setProducts(response.data.data.products);
     } catch (error) {
       console.error("Error fetching products:", error.response?.data || error.message);
     } finally {
@@ -55,7 +56,7 @@ const Products = () => {
       <div className="container max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 md:px-0">
         <SideBarCategories />
         <div className="lg:col-span-9">
-          <FilterDisplay />
+          {/* <FilterDisplay /> */}
           {loading ? (
             <p>Loading...</p>
           ) : products.length > 0 ? (

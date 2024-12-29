@@ -1,6 +1,6 @@
 import { productActions } from "./productSlice";
 export const fetchProductDetails = (id) => {
-  const productDetailsUrl = `http://127.0.0.1:8000/api/get-product/detail/${id}`;
+  const productDetailsUrl = `https://api.lot24.ma/api/get-product/detail/${id}`;
   return async (dispatch) => {
     const products = async () => {
       const response = await fetch(productDetailsUrl);

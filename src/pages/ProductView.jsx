@@ -32,7 +32,7 @@ const ProductView = () => {
     dispatch(fetchProductDetails(id));
   }, [dispatch]);
   const { product } = productItems;
-  console.log(product);
+  // console.log(product.seller.name);
   const images = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTblJRG5o6QR989lq7rmmfuWbEF6x8J2QC_1A&s",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaJf_ISxyfHDw5cBbtFhe6G_oigFyhNl6SXw&s",
@@ -112,6 +112,7 @@ const ProductView = () => {
     options: [product?.delivery_option],
   };
   const tagData = [product?.tags];
+
 
   const wholesaler = {
     name: "ABC Wholesaler",
@@ -205,10 +206,10 @@ const ProductView = () => {
             </div>
           </div>
           <WholesalerData
-            wholesaler={wholesaler}
+            product={product}
             isDetailInitial={isDetailInitial}
-            hours={hours}
-            currentDay={currentDay} // Pass the currentDay to the component
+            // hours={hours}
+            // currentDay={currentDay} // Pass the currentDay to the component
           />
         </div>
         <div className="my-10 bg-">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -23,8 +23,18 @@ import { SellerChat } from "./components/SellerChat";
 import SellerChatScreen from "./components/SellerChatScreen";
 import ShowProducts from "./pages/ShowProducts";
 import { AuthContextProvider } from "./store/AuthContext";
+import PrivacyPolicy from "./components/Footer/PrivacyPolicay";
+import RefundPolicy from "./components/Footer/RefundPolicay";
+import AboutUs from "./components/Footer/AboutUs";
+import Faqs from "./components/Faqs";
+import { Blogs } from "./components/Footer/Blogs";
 
 const App = () => {
+  const [activeFaq, setActiveFaq] = useState(null);
+
+  const toggleFaq = (index) => {
+    setActiveFaq(activeFaq === index ? null : index);
+  };
   return (
     <QueryClientProvider client={new QueryClient()}>
       <AuthContextProvider>
@@ -40,7 +50,6 @@ const App = () => {
             <Route path="/register/form" element={<RegisterForm />} />
             <Route path="/add_to_cart" element={<AddToCart />} />
             <Route path="/payments/cards" element={<CardPayment />} />
-            <Route path="/conditions" element={<Condition />} />
             <Route path="/contact" element={<CustomerService />} />
             <Route path="/buyer" element={<BuyerPage />} />
             <Route path="/:id/buyerChat" element={<ChattingComponent />} />
@@ -53,7 +62,13 @@ const App = () => {
 
             <Route path="/seller/chat" element={<SellerChat />} />
             <Route path="/seller/chat/:id" element={<SellerChatScreen />} />
-
+            {/* footer  */}
+            <Route path="/conditions" element={<Condition />} />
+            <Route path="/privacy/policy" element={<PrivacyPolicy />} />
+            <Route path="/refund/policy" element={<RefundPolicy />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path="/faq" element={<Faqs activeFaq={activeFaq} toggleFaq={toggleFaq} />} />
+            <Route path="/blogs" element={<Blogs />} />
           </Routes>
         </Router>
       </AuthContextProvider>

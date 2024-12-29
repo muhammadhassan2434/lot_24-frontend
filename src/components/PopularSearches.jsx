@@ -11,7 +11,7 @@ const PopularSearches = ({ title = "Popular searches", searches = [] }) => {
               key={index}
               className="m-1 p-2 bg-white inline-block rounded-lg"
             >
-              {search.description}
+              {search.search}
             </span>
           ))}
         </div>

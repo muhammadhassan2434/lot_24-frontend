@@ -27,7 +27,7 @@ const NavBar = () => {
     const fetchColors = async () => {
       try {
         const response = await axios.get("https://api.lot24.ma/api/color/list");
-        console.log(response.data); // Log the response data
+        // console.log(response.data); // Log the response data
         const navbarColorData = response.data.find((color) => color.title.toLowerCase() === "navbar");
         if (navbarColorData) {
           setNavbarColor(navbarColorData.color); // Set the navbar color

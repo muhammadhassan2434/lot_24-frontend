@@ -23,7 +23,9 @@ export const API_ENDPOINTS = {
     PUBLIC: {
         GetCountries: API_DOMAIN + 'country',
         GetChatDetails: API_DOMAIN + 'messages/', // chat id as param
-        getPopularSearches: API_DOMAIN + 'header/list', // chat id as param
+        getPopularSearches: API_DOMAIN + 'popularsearch/list', // chat id as param
+        getopBar: API_DOMAIN + 'topbar/list', // chat id as param
+        getBlogs: API_DOMAIN + 'blog/list', // chat id as param
     },
     SUBCRIPTION: {
         SHOW_Subcription: API_DOMAIN + 'show-subscription',

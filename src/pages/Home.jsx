@@ -21,6 +21,8 @@ import {
   mostPopularProduct,
   recentAddProduct,
   popularSearches,
+  topBar,
+  getBlogs,
 } from "../utils/mutations/productMutation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PopularSearches from "../components/PopularSearches";
@@ -69,7 +71,7 @@ const Home = () => {
   //   "Wholesale Work Boots Distributors",
   // ];
 
-  useEffect(() => {a
+  useEffect(() => {
     const fetchColors = async () => {
       try {
         const response = await axios.get("https://api.lot24.ma/api/color/list");
@@ -91,6 +93,22 @@ const Home = () => {
     isLoading: searchesLoading,
     isError: searchesError,
   } = useFetchProducts(["getPopularSeacrhes"], popularSearches);
+
+  // get top bar 
+  const {
+    data: topbar = [],
+    isLoading: topbarLoading,
+    isError: topbarError,
+  } = useFetchProducts(["topBar"], topBar);
+
+  // get blogs
+  const {
+    data: blogs = [],
+    isLoading: blogsLoading,
+    isError: blogsError,
+  } = useFetchProducts(["blogs"], getBlogs);
+  // const topbarColor = {{topbar.color}}
+  // console.log(topbar)
   // console.log(searches)
   
   const recentlyProducts = [
@@ -138,16 +156,15 @@ const Home = () => {
 
             {/* #1 Platform Section */}
             <div className="lg:w-1/2">
-              <div className="bg-[#0066A1] h-full p-4 rounded-lg">
+              <div className="h-full p-4 rounded-lg" style={{ backgroundColor: topbar[0]?.color || "#000" }}>
                 <div className="flex items-center justify-center h-full gap-4">
-                  <h1 className="text-white text-[50px] font-bold">#1</h1>
+                  <h1 className="text-white text-[50px] font-bold">{topbar[0]?.title}</h1>
                   <div>
                     <div className="text-white text-[30px]">
-                      #1 Platform since 2008
+                      {topbar[0]?.slug}
                     </div>
                     <div className="text-gray-300">
-                      On the wholesale market of liquidation stocks, surplus
-                      stocks, and bankrupt stocks
+                     {topbar[0]?.description}
                     </div>
                   </div>
                 </div>
@@ -306,7 +323,7 @@ const Home = () => {
         <RecentlyAdded
           title="Recently Added"
           link="#"
-          products={recentlyProducts}
+          blogs={blogs}
         />
 
         {/* maps sections */}

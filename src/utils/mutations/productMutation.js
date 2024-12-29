@@ -45,4 +45,10 @@ export const verifyUser = async(token) => {
 export const popularSearches = async() => {
   return apiCall(API_ENDPOINTS.PUBLIC.getPopularSearches, "GET",);
 }
+export const topBar = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getopBar, "GET",);
+}
+export const getBlogs = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getBlogs, "GET",);
+}
 

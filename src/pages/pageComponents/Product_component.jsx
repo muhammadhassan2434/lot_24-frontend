@@ -18,8 +18,8 @@ const Product_component = ({
         />
         <div className="p-2 flex gap-2 flex-col m-3">
           <p className="text-sm font-bold text-gray-500">
-            <span className="text-red-600">{product.price.split("/")[0]}</span>{" "}
-            {product.price.split("/")[1]}
+            <span className="text-red-600">{product.price}</span>{" "}
+            {product.price}
           </p>
           <h1 className="hover:text-blue-500">{product.name}</h1>
           {product.negotiable && (
