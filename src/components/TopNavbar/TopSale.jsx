@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 const TopSale = () => {
 
-  const {t} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const top_sale = {
     backgroundImage: `url(${sale_img})`,
@@ -33,8 +33,8 @@ const TopSale = () => {
               </div>
               <div>
                 <h1 className="text-center text-lg font-bold ">20</h1>
-                <p className="text-center md-text-left ">
-                  Number of remaining packages
+                <p className="text-center md-text-left">
+                {t("header.header13")}
                 </p>
               </div>
               <Link
@@ -42,7 +42,7 @@ const TopSale = () => {
                 className="hover:bg-[#c08f33] hover:text-white cursor-pointer text-white gap-2
                          bg-[#f29d00] py-1 px-3 text-[15px] md:text-[20px] flex items-center justify-center min-h-[30px]"
               >
-                <span className="pb-[3px] font-bold">Register</span>
+                <span className="pb-[3px] font-bold"> {t("header.header14")}</span>
                 <i className="fa-solid fa-angles-right m-0 p-0"></i>
               </Link>
             </div>
