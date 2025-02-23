@@ -4,22 +4,25 @@ import Echo from "laravel-echo";
 import { useParams } from "react-router-dom";
 import Pusher from "pusher-js";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useLocation } from "react-router-dom";
 
 const ChatScreen = () => {
   const { id: sellerId } = useParams(); // Extract sellerId from URL
   const [messages, setMessages] = useState([]); // Store messages
   const [currentMessage, setCurrentMessage] = useState(""); // Current message input
   const [chatId, setChatId] = useState(null); // Chat ID
-  const {userData} = useAuthContext()
+  const { userData } = useAuthContext();
+  const location = useLocation();
+  const sellerName = location.state?.sellerName || "Unknown Seller";
   // const userData?.id = 2; // Example buyer ID
-// console.log(userData)
+  // console.log(userData)
   // Initialize Laravel Echo
   useEffect(() => {
     window.Pusher = Pusher;
     window.Echo = new Echo({
       broadcaster: "pusher",
-      key: "53d173aa395db1ed5052", // Replace with your Pusher key
-      cluster: "mt1",
+      key: "18468045d5c2298cb019", // Replace with your Pusher key
+      cluster: "ap2",
       forceTLS: true,
     });
   }, []);
@@ -28,17 +31,23 @@ const ChatScreen = () => {
   useEffect(() => {
     const startChat = async () => {
       try {
-        const response = await axios.post("https://api.lot24.ma/api/createChat", {
-          buyer_id: userData?.id,
-          seller_id: sellerId,
-        });
+        const response = await axios.post(
+          "https://api.lot24.ma/api/createChat",
+          {
+            buyer_id: userData?.id,
+            seller_id: sellerId,
+          }
+        );
 
         if (response.data && response.data.id) {
           setChatId(response.data.id); // Set chat ID
           fetchMessages(response.data.id); // Fetch initial messages
         }
       } catch (error) {
-        console.error("Error starting chat:", error.response?.data || error.message);
+        console.error(
+          "Error starting chat:",
+          error.response?.data || error.message
+        );
       }
     };
 
@@ -48,7 +57,7 @@ const ChatScreen = () => {
   // Fetch messages
   useEffect(() => {
     if (!chatId) return; // Exit if chatId is not defined
-  
+
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
@@ -61,10 +70,13 @@ const ChatScreen = () => {
           setMessages([]); // No messages found
         }
       } catch (error) {
-        console.error("Error fetching messages:", error.response?.data || error.message);
+        console.error(
+          "Error fetching messages:",
+          error.response?.data || error.message
+        );
       }
     };
-  
+
     fetchMessages();
   }, [chatId]);
 
@@ -103,14 +115,17 @@ const ChatScreen = () => {
       setMessages([...messages, response.data]); // Append new message
       setCurrentMessage(""); // Clear input field
     } catch (error) {
-      console.error("Error sending message:", error.response?.data || error.message);
+      console.error(
+        "Error sending message:",
+        error.response?.data || error.message
+      );
     }
   };
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center border-b p-4">
-        <h2 className="font-bold text-lg">Chat with Seller ID: {sellerId}</h2>
+        <h2 className="font-bold text-lg">Chat with Seller: {sellerName}</h2>
       </div>
 
       <div className="flex-grow overflow-y-auto p-4 bg-gray-50">
@@ -119,11 +134,14 @@ const ChatScreen = () => {
             <div
               key={msg.id}
               className={`p-2 mb-2 rounded-lg ${
-                msg.sender_id === userData?.id ? "bg-blue-100 text-right" : "bg-gray-200 text-left"
+                msg.sender_id === userData?.id
+                  ? "bg-blue-100 text-right"
+                  : "bg-gray-200 text-left"
               }`}
             >
               <p className="text-sm font-bold">
-                {msg.sender_id === userData?.id ? "You" : `Seller ID: ${sellerId}`}
+                {msg.sender_id === userData?.id ? "You" : sellerName}{" "}
+                {/* Display the seller's name */}
               </p>
               <p>{msg.message}</p>
             </div>

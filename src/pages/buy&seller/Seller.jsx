@@ -10,6 +10,7 @@ import seller_3 from "../../assets/images/seller-3.svg";
 import seller_4 from "../../assets/images/seller-4.svg";
 import seller_5 from "../../assets/images/seller-5.svg";
 import seller_6 from "../../assets/images/seller-6.svg";
+import WhatsAppButton from "../../components/WhatsAppButton";
 
 const statsData = [
   { icon: "fa-people-group", count: "1000+", label: "Users" },
@@ -168,6 +169,7 @@ const Seller = () => {
   return (
     <>
       <TopNavbar />
+    <WhatsAppButton/>
       <TopHeading
         heading="For Sellers"
         para="Wholesale trading platform #1 for sellers. The best deals to connect with global buyers and showcase surplus stock, end of series, and much more."

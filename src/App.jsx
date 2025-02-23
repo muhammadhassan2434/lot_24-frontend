@@ -28,19 +28,28 @@ import RefundPolicy from "./components/Footer/RefundPolicay";
 import AboutUs from "./components/Footer/AboutUs";
 import Faqs from "./components/Faqs";
 import { Blogs } from "./components/Footer/Blogs";
+import { CurrencyProvider } from "./hooks/CurrencyContext";
 
 const App = () => {
+  const [currency, setCurrency] = useState("USD");
+  const [conversionRate, setConversionRate] = useState(1); 
+
+  const handleCurrencyChange = (newCurrency, rate) => {
+    setCurrency(newCurrency);
+    setConversionRate(rate);
+  };
   const [activeFaq, setActiveFaq] = useState(null);
 
   const toggleFaq = (index) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
   return (
+    <CurrencyProvider>
     <QueryClientProvider client={new QueryClient()}>
       <AuthContextProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home onCurrencyChange={handleCurrencyChange} />} />
             <Route path="/register" element={<Register />} />
             <Route path="/products" element={<Products />} />
             <Route path="/buyerinfo" element={<Buyer />} />
@@ -49,7 +58,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register/form" element={<RegisterForm />} />
             <Route path="/add_to_cart" element={<AddToCart />} />
-            <Route path="/payments/cards" element={<CardPayment />} />
+            <Route path="/payments/cards/:subscriptionName/:totalGrossPrice" element={<CardPayment />} />
             <Route path="/contact" element={<CustomerService />} />
             <Route path="/buyer" element={<BuyerPage />} />
             <Route path="/:id/buyerChat" element={<ChattingComponent />} />
@@ -61,7 +70,8 @@ const App = () => {
             <Route path="/seller/products" element={<ShowProducts />} />
 
             <Route path="/seller/chat" element={<SellerChat />} />
-            <Route path="/seller/chat/:id" element={<SellerChatScreen />} />
+            <Route path="/seller/chat/:id/:buyerName" element={<SellerChatScreen />} />
+
             {/* footer  */}
             <Route path="/conditions" element={<Condition />} />
             <Route path="/privacy/policy" element={<PrivacyPolicy />} />
@@ -73,6 +83,7 @@ const App = () => {
         </Router>
       </AuthContextProvider>
     </QueryClientProvider>
+    </CurrencyProvider>
   );
 };
 

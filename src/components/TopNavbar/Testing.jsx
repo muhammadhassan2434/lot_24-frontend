@@ -4,9 +4,10 @@ import CategoryItem from "./CategoryItem";
 import useFetchProducts from "../../hooks/useFetchProducts";
 import { getCategories } from "../../utils/mutations/productMutation";
 import axios from "axios";
-// import { categories } from "../../utils/data";
+import { useTranslation } from "react-i18next";
 
 const Testing = () => {
+  const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [headerColor, setHeaderColor] = useState("#299BCC");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -15,21 +16,22 @@ const Testing = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleCategory = () => setIsCategoryOpen((prev) => !prev);
   const toggleCategory2 = () => setMisCategoryOpen((prev) => !prev);
+
   const {
     data: Categories = [],
     isLoading: categoriesLoading,
     isError: categorierError,
   } = useFetchProducts(["getCategories"], getCategories);
 
-
   useEffect(() => {
     const fetchColors = async () => {
       try {
         const response = await axios.get("https://api.lot24.ma/api/color/list");
-        // console.log(response.data); // Log the response data
-        const navbarColorData = response.data.find((color) => color.title.toLowerCase() === "header");
+        const navbarColorData = response.data.find(
+          (color) => color.title.toLowerCase() === "header"
+        );
         if (navbarColorData) {
-          setHeaderColor(navbarColorData.color); // Set the navbar color
+          setHeaderColor(navbarColorData.color);
         }
       } catch (error) {
         console.error("Error fetching colors:", error.response?.data || error.message);
@@ -39,7 +41,6 @@ const Testing = () => {
     fetchColors();
   }, []);
 
-  // console.log(Categories)
   return (
     <nav className="px-4 py-3 shadow-md" style={{ backgroundColor: headerColor }}>
       <div className="container max-w-[1280px] mx-auto">
@@ -50,16 +51,21 @@ const Testing = () => {
             {/* Categories Dropdown */}
             <div className="relative">
               <button
-                className="flex items-center text-white py-2 px-4  bg-[#1d7094] rounded-md font-semibold hover:bg-[#1a6482] transition duration-300"
+                className="flex items-center text-white py-2 px-4 bg-[#1d7094] rounded-md font-semibold hover:bg-[#1a6482] transition duration-300"
                 onClick={toggleCategory}
               >
                 <i className="fa-solid fa-bars mr-2"></i>
-                Categories
+                {t("header.header6")}
               </button>
               {isCategoryOpen && (
-                <ul className="absolute top-12 left-0 bg-white shadow-lg rounded-lg min-w-[300px]  z-20">
+                <ul className="absolute top-12 left-0 bg-white shadow-lg rounded-lg min-w-[300px] z-20">
                   {Categories.map((category, index) => (
-                    <CategoryItem category={category} key={index} />
+                    <CategoryItem
+                      category={category}
+                      key={index}
+                      onMouseEnter={() => setIsCategoryOpen(true)}
+                      onMouseLeave={() => setIsCategoryOpen(false)}
+                    />
                   ))}
                 </ul>
               )}
@@ -67,17 +73,15 @@ const Testing = () => {
 
             {/* Main Links */}
             <div className="hidden lg:flex gap-6">
-              {["Products", "Stocks", "Wholesalers", "Top Offers"].map(
-                (link, index) => (
-                  <Link
-                    to="#"
-                    key={index}
-                    className="text-white hover:text-gray-200 font-semibold transition duration-300"
-                  >
-                    {link}
-                  </Link>
-                )
-              )}
+              {["Products", "Stocks", "Wholesalers", "Top Offers"].map((link, index) => (
+                <Link
+                  to="#"
+                  key={index}
+                  className="text-white hover:text-gray-200 font-semibold transition duration-300"
+                >
+                  {link}
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -87,15 +91,12 @@ const Testing = () => {
               href="#"
               className="py-3 px-6 bg-[#f29d00] text-white font-bold rounded-md hover:bg-[#fbc053] transition duration-300"
             >
-              Add offers <i className="fa-solid fa-plus ml-2"></i>
+              {t("header.header7")} <i className="fa-solid fa-plus ml-2"></i>
             </a>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button
-            className="lg:hidden text-white text-2xl"
-            onClick={toggleMenu}
-          >
+          <button className="lg:hidden text-white text-2xl" onClick={toggleMenu}>
             <i className={`fa-solid ${isMenuOpen ? "fa-xmark" : "fa-bars"}`} />
           </button>
         </div>
@@ -104,17 +105,15 @@ const Testing = () => {
         {isMenuOpen && (
           <div className="mt-4 lg:hidden bg-[#1d7094] text-white rounded-lg shadow-lg">
             <div className="px-6 py-4">
-              {["Products", "Stocks", "Wholesalers", "Top Offers"].map(
-                (link, index) => (
-                  <Link
-                    to="#"
-                    key={index}
-                    className="block text-white py-2 hover:bg-[#fbc053] rounded-md"
-                  >
-                    {link}
-                  </Link>
-                )
-              )}
+              {["Products", "Stocks", "Wholesalers", "Top Offers"].map((link, index) => (
+                <Link
+                  to="#"
+                  key={index}
+                  className="block text-white py-2 hover:bg-[#fbc053] rounded-md"
+                >
+                  {link}
+                </Link>
+              ))}
             </div>
 
             <div className="px-6 py-4">
@@ -122,7 +121,7 @@ const Testing = () => {
                 href="#"
                 className="block py-3 px-6 bg-[#f29d00] text-white font-bold rounded-md hover:bg-[#fbc053] transition duration-300"
               >
-                Add offers <i className="fa-solid fa-plus ml-2"></i>
+                {t("header.header7")} <i className="fa-solid fa-plus ml-2"></i>
               </a>
             </div>
           </div>

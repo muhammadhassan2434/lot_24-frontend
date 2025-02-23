@@ -7,7 +7,7 @@ import News from "../components/News/News";
 import ImageViewer from "react-simple-image-viewer";
 import { shippingData } from "../utils/deliveryCountries";
 import Product_Swipper from "./pageComponents/Product_Swipper";
-import { products } from "../utils/products";
+// import { products } from "../utils/products";
 import Related_Search from "../components/Related_search/Related_Search";
 import Breadcrumbs from "../components/Breadcrumbs";
 import ProductDetail from "../components/ProductDetail";
@@ -18,8 +18,16 @@ import TagsSection from "../components/TagsSection";
 import WholesalerData from "../components/WholesalerData";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetails } from "../store/productActions";
+import {
+  mostPopularProduct,
+  recentAddProduct,
+} from "../utils/mutations/productMutation";
+import useFetchProducts from "../hooks/useFetchProducts";
+import { useTranslation } from "react-i18next";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 const ProductView = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const [currentImage, setCurrentImage] = React.useState(0);
   const [isViewerOpen, setIsViewerOpen] = React.useState(false);
@@ -32,13 +40,25 @@ const ProductView = () => {
     dispatch(fetchProductDetails(id));
   }, [dispatch]);
   const { product } = productItems;
+
+  const {
+    data: mostRecent = [],
+    isLoading: mostRecentLoading,
+    isError: mostRecentError,
+  } = useFetchProducts(["mostRecent"], recentAddProduct);
+  // console.log(mostRecent);
+
+  const {
+    data: mostPopular = [],
+    isLoading: mostPopularLoading,
+    isError: mostPopularError,
+  } = useFetchProducts(["mostPopular"], mostPopularProduct);
+
   // console.log(product.seller.name);
-  const images = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTblJRG5o6QR989lq7rmmfuWbEF6x8J2QC_1A&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaJf_ISxyfHDw5cBbtFhe6G_oigFyhNl6SXw&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhdW6_AMXWN70u4mci8f3eUs0bY0Ady7cwow&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAyr4Xx6yVgyBXPcLGaTVFFqtGCM-WdcopTw&s",
-  ];
+  const images =
+    Array.isArray(product?.images) && product.images.length > 0
+      ? product.images.map((img) => `https://api.lot24.ma/${img.image}`)
+      : ["https://via.placeholder.com/400x300"];
 
   const openImageViewer = React.useCallback((index) => {
     setCurrentImage(index);
@@ -81,7 +101,7 @@ const ProductView = () => {
     "STOCK CLOTHING, UNDERWEAR AND SHOES FOR WOMEN, MEN, CHILDREN",
   ];
   const productData = {
-    sellerId: product?.seller_id ,
+    sellerId: product?.seller_id,
     productId: product?.id,
     title: product?.title,
     price: product?.sale_price,
@@ -113,7 +133,6 @@ const ProductView = () => {
   };
   const tagData = [product?.tags];
 
-
   const wholesaler = {
     name: "ABC Wholesaler",
     country: "USA",
@@ -131,9 +150,10 @@ const ProductView = () => {
   return (
     <>
       <TopNavbar />
+      <WhatsAppButton/>
 
       <div className="py-12 max-w-[1280px] px-4 md:px-0 container mx-auto">
-        <Breadcrumbs items={breadcrumbItems} />
+        {/* <Breadcrumbs items={breadcrumbItems} /> */}
         <div className="flex flex-wrap mt-8">
           <div className="product-view md:p-0 md:w-[70%]">
             <div className="flex flex-wrap md:gap-2 lg:gap-0">
@@ -150,9 +170,10 @@ const ProductView = () => {
                       marginTop: `${index === 0 ? "0" : "20px"}`,
                       objectFit: "contain",
                     }}
-                    alt=""
+                    alt={`Product image ${index + 1}`}
                   />
                 ))}
+
                 {isViewerOpen && (
                   <ImageViewer
                     src={images}
@@ -214,15 +235,47 @@ const ProductView = () => {
         </div>
         <div className="my-10 bg-">
           <Product_Swipper
-            heading={"Other offers of this wholesaler"}
+            heading={t("tags.tags3")}
             link={"#"}
-            products={products}
+            products={mostRecent.map((product) => ({
+              img:
+                product?.images?.length > 0
+                  ? `https://api.lot24.ma/${product.images[0].image}`
+                  : "https://via.placeholder.com/400x300", // Default placeholder image
+              price:
+                product.sale_price ||
+                "Price not available",
+                regular_price:product.regular_price,
+              name: product.title,
+              availability:
+                product.product_stock > 0 ? "In Stock" : "Out of Stock",
+              status: product.stock_status,
+            }))}
           />
           <Product_Swipper
+            heading={t("tags.tags2")}
+            link={"#"}
+            products={mostPopular.map((product) => ({
+              img:
+                product?.images?.length > 0
+                  ? `https://api.lot24.ma/${product.images[0].image}`
+                  : "https://via.placeholder.com/400x300", // Default placeholder image
+              price:
+                product.sale_price ||
+                "Price not available",
+                name: product.title,
+                regular_price:product.regular_price,
+              availability:
+                product.product_stock > 0 ? "In Stock" : "Out of Stock",
+              status: product.stock_status,
+            }))}
+          />
+
+          {/* <Product_Swipper
             heading={"Other offers in this category"}
             link={"#"}
             products={products}
-          />
+          /> */}
           <div className="my-4">
             <Related_Search />
           </div>

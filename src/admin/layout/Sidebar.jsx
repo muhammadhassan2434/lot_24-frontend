@@ -1,11 +1,19 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuthContext
+  
+ } from "../../hooks/useAuthContext";
 
 const Sidebar = () => {
   const {userData:user} = useAuthContext()
   const navigate = useNavigate();
+  const token = localStorage.getItem("auth_token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token");
+    window.location.reload(); // Reload the page to reflect changes
+  };
 
   const sections = [
     {
@@ -65,7 +73,7 @@ const Sidebar = () => {
         </div>
 
         <Link to="/">
-          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 w-full rounded">
+          <button onClick={handleLogout} className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 w-full rounded">
             Logout
           </button>
         </Link>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PaymentMethodCard = ({ imageSrc, altText, buttonText, buttonLink, buttonAction }) => (
+const PaymentMethodCard = ({ imageSrc, altText, buttonText, buttonLink, buttonAction , buttonState }) => (
   <div className="flex flex-col items-center justify-between bg-gray-100 p-6 rounded-lg shadow-lg">
     <div className="mb-4 w-full">
       <img src={imageSrc} alt={altText} className="w-full mb-4" />

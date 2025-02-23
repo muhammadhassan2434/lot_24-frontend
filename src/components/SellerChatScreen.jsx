@@ -8,38 +8,53 @@ import { getChatDetails } from "../utils/queries/productQurires";
 import { useQuery } from "@tanstack/react-query";
 
 const SellerChatScreen = () => {
-  const { id: buyerId } = useParams(); // Extract buyerId from URL
+  const {id: buyerId, buyerName } = useParams(); // Extract buyerId and buyerName from the URL
+  const [buyer, setBuyer] = useState(null); // Extract buyerId from URL
   const [messages, setMessages] = useState([]); // Store messages
   const location = useLocation();
-  const {userData} = useAuthContext();
+  const { userData } = useAuthContext();
 
+  useEffect(() => {
+    // If the buyer's name is not passed, try to fetch it using buyerId
+    if (!buyerName) {
+      const buyerInfo = getBuyerInfo(buyerId);
+      setBuyer(buyerInfo);
+    } else {
+      const [firstName, lastName] = buyerName.split("-");
+      setBuyer({ name: firstName, surname: lastName });
+    }
+  }, [buyerId, buyerName]);
   // console.log(buyerId)
   // const userData?.id = location.state?.id; // Sent from the sidebar
   const navigate = useNavigate();
-  const token = localStorage.getItem('auth_token')
-  if(!token){
-    navigate('/login')
+  const token = localStorage.getItem("auth_token");
+  if (!token) {
+    navigate("/login");
   }
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
-  const {data:chatDetails, isLoading:chatDetailsLoading, isError:chatDetailsError} = useQuery({
-    queryKey: ['seller-chat-details'],
-    queryFn: () => getChatDetails(chatId, token)
-  })
-  
+  const {
+    data: chatDetails,
+    isLoading: chatDetailsLoading,
+    isError: chatDetailsError,
+  } = useQuery({
+    queryKey: ["seller-chat-details"],
+    queryFn: () => getChatDetails(chatId, token),
+  });
+
   // console.log(userData?.id)
   // console.log(chatId)
   // console.log(chatDetails)
   // console.log(chatDetailsError)
-  
+
   // Initialize Echo
   useEffect(() => {
     window.Pusher = Pusher;
     window.Echo = new Echo({
       broadcaster: "pusher",
-      key: "53d173aa395db1ed5052",
-      cluster: "mt1",
+      key: "18468045d5c2298cb019",
+      cluster: "ap2",
       forceTLS: true,
     });
 
@@ -48,17 +63,13 @@ const SellerChatScreen = () => {
     };
   }, []);
 
-
   useEffect(() => {
     const fetchChatId = async () => {
       try {
-        const response = await axios.post(
-          'https://api.lot24.ma/api/chat/id',
-          {
-            buyerId: buyerId, // Replace with your actual buyerId value
-            sellerId: userData?.id, // Send the sellerId from userData
-          }
-        );
+        const response = await axios.post("https://api.lot24.ma/api/chat/id", {
+          buyerId: buyerId, // Replace with your actual buyerId value
+          sellerId: userData?.id, // Send the sellerId from userData
+        });
         // console.log(response.data);
         setChatId(response.data.id); // Set the fetched chat ID
       } catch (error) {
@@ -68,48 +79,44 @@ const SellerChatScreen = () => {
         );
       }
     };
-  
+
     if (buyerId && userData?.id) {
       fetchChatId();
     }
   }, [buyerId, userData?.id]);
-  
-  
 
-
-useEffect(() =>{  
-  if(chatDetails?.messages && chatDetails?.messages.length > 0){
-    setMessages(chatDetails.messages)
-  }
-
-} , [chatDetails])
-
-
-useEffect(() => {
-  if (!chatId) return; // Exit if chatId is not defined
-
-  const fetchMessages = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.lot24.ma/api/messages/${chatId}`
-      );
-      // Access the `messages` property from the first object in the array
-      if (response.data && response.data.length > 0) {
-        setMessages(response.data[0].messages); // Extract and set the messages array
-      } else {
-        setMessages([]); // No messages found
-      }
-    } catch (error) {
-      console.error("Error fetching messages:", error.response?.data || error.message);
+  useEffect(() => {
+    if (chatDetails?.messages && chatDetails?.messages.length > 0) {
+      setMessages(chatDetails.messages);
     }
-  };
+  }, [chatDetails]);
 
-  fetchMessages();
-}, [chatId]);
+  useEffect(() => {
+    if (!chatId) return; // Exit if chatId is not defined
 
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.lot24.ma/api/messages/${chatId}`
+        );
+        // Access the `messages` property from the first object in the array
+        if (response.data && response.data.length > 0) {
+          setMessages(response.data[0].messages); // Extract and set the messages array
+        } else {
+          setMessages([]); // No messages found
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching messages:",
+          error.response?.data || error.message
+        );
+      }
+    };
 
-// fetchMessages()
+    fetchMessages();
+  }, [chatId]);
 
+  // fetchMessages()
 
   // Start a new chat or fetch existing messages
   // useEffect(() => {
@@ -135,7 +142,6 @@ useEffect(() => {
   // }, [userData?.id, buyerId]);
 
   // Fetch messages for the current chat
- 
 
   // Real-time Updates with Laravel Echo
   useEffect(() => {
@@ -170,38 +176,47 @@ useEffect(() => {
       setMessages([...messages, response.data]); // Append new message
       setCurrentMessage(""); // Clear input field
     } catch (error) {
-      console.error("Error sending message:", error.response?.data || error.message);
+      console.error(
+        "Error sending message:",
+        error.response?.data || error.message
+      );
     }
   };
-
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center border-b p-4">
-        <h2 className="font-bold text-lg">Chat with Buyer ID: {buyerId}</h2>
+        <h2 className="font-bold text-lg">
+          {" "}
+          Chat with{" "}
+          {buyer ? `${buyer.name} ${buyer.surname}` : `Buyer ID: ${buyerId}`}
+        </h2>
       </div>
 
       <div className="flex-grow overflow-y-auto p-4 bg-gray-50">
-        {messages.length > 0 ? (
-          messages.map((msg) => (
-            <div
-            key={msg.id}
-              className={`p-2 mb-2 rounded-lg ${
-                msg.sender_id === userData?.id
-                  ? "bg-blue-100 text-right"
-                  : "bg-gray-200 text-left"
-              }`}
-            >
-              <p className="text-sm font-bold">
-                {msg.sender_id === userData?.id ? "You" : `Buyer ID: ${buyerId}`}
-              </p>
-              <p>{msg.message}</p>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500 text-center">No messages yet...</p>
-        )}
+  {messages.length > 0 ? (
+    messages.map((msg) => (
+      <div
+        key={msg.id}
+        className={`p-2 mb-2 rounded-lg ${
+          msg.sender_id === userData?.id
+            ? "bg-blue-100 text-right"
+            : "bg-gray-200 text-left"
+        }`}
+      >
+        <p className="text-sm font-bold">
+          {msg.sender_id === userData?.id
+            ? "You"
+            : `${buyer?.name} ${buyer?.surname}` || `Buyer ID: ${buyerId}`}
+        </p>
+        <p>{msg.message}</p>
       </div>
+    ))
+  ) : (
+    <p className="text-gray-500 text-center">No messages yet...</p>
+  )}
+</div>
+
 
       <div className="border-t p-4 flex items-center">
         <input

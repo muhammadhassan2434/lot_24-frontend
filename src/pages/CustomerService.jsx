@@ -3,14 +3,30 @@ import TopNavbar from "../components/TopNavbar/TopNavbar";
 import Footer from "../components/Footer/Footer";
 import News from "../components/News/News";
 import CustomerServiceInput from "../components/CustomerServiceInput";
+import { toast, ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import WhatsAppButton from "../components/WhatsAppButton";
+import useFetchProducts from "../hooks/useFetchProducts";
+import { getContactInfo } from "../utils/mutations/productMutation";
 
 const CustomerService = () => {
+  const {t} = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: "",
+    massage: "",
+    // status: "unread",
     consent: false,
   });
+
+  const{
+    data:contactInfo =[],
+    isLoading:ContactLoading,
+    isError: contactError
+  }= useFetchProducts(["contactInfo"],getContactInfo);
+
+
+  console.log(contactInfo);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,20 +36,58 @@ const CustomerService = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    alert("Message sent!");
+    if (!formData.massage.trim()) {
+      toast.error("The message field is required.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("https://api.lot24.ma/api/contactus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const rawResponse = await response.text(); // Get raw text response
+      console.log("Raw Response:", rawResponse);
+  
+      const result = JSON.parse(rawResponse); // Attempt to parse JSON
+  
+      if (response.ok && result.status) {
+        toast.success("Contact information sent successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          massage: "",
+          consent: false,
+        });
+      } else {
+        console.error("Validation Error:", result.error);
+        toast.error(`Validation Error: ${JSON.stringify(result.error)}`);
+      }
+    } catch (error) {
+      console.error("Error posting data:", error);
+      toast.error("Failed to send the message. Please try again.");
+    }
   };
+  
+  
+  
 
   return (
     <>
       <TopNavbar />
+      <WhatsAppButton/>
+       <ToastContainer />
       <div className="bg-gray-50 p-8">
         <div className="max-w-7xl  max-w-[1280px] mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold">Customer Service</h1>
+            <h1 className="text-3xl font-bold">{t("register.register18")}</h1>
             <p className="text-lg text-gray-600">
               We are at your service from Monday to Friday, hours 09:00-17:00
               Europe/Warsaw
@@ -43,47 +97,36 @@ const CustomerService = () => {
           {/* Contact Section */}
           <div className="lg:flex lg:space-x-12">
             {/* Direct Communication */}
-            <div className="lg:w-1/2 mb-8 lg:mb-0">
-              <h2 className="text-xl font-semibold mb-4">
-                Direct communication
-              </h2>
-              <div className="flex items-center space-x-2 mb-4">
-                <span className="text-xl">
-                  <i className="fa-solid fa-phone"></i>
-                </span>
-                <span className="text-lg">+44 330 127 9628</span>
-              </div>
-              <div className="flex items-center space-x-2 mb-4">
-                <span className="text-xl">
-                  {/* awesome font icon i of mail*/}
-                  <i className="fa-solid fa-envelope"></i>
-                </span>
-                <span className="text-lg">info@merkandi.com</span>
-              </div>
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-400 mb-4">
-                Start live-chat
-              </button>
-              <div className="text-sm">
-                <p>
-                  Do you want to speak a different language?{" "}
-                  <a href="#" className="text-blue-500">
-                    Check it here!
-                  </a>
-                </p>
-              </div>
-              {/* Company Info */}
-              <div className="mt-12">
-                <h2 className="text-lg font-semibold">Company information</h2>
-                <div className="space-y-2 mt-4">
-                  <p className="text-sm">Merkandi Ltd</p>
-                  <p className="text-sm">
-                    Unit 4E, Enterprise Court, S63 5DB Rotherham, United Kingdom
-                  </p>
-                  <p className="text-sm">VAT Number: GB 254632212</p>
-                  <p className="text-sm">Company number: 09582404</p>
-                </div>
-              </div>
-            </div>
+            {contactInfo.map((info, index) => (
+  <div key={index} className="lg:w-1/2 mb-8 lg:mb-0">
+    <h2 className="text-xl font-semibold mb-4">{t("register.register19")}</h2>
+    
+    <div className="flex items-center space-x-2 mb-4">
+      <span className="text-xl">
+        <i className="fa-solid fa-phone"></i>
+      </span>
+      <span className="text-lg">+{info.phone}</span>
+    </div>
+
+    <div className="flex items-center space-x-2 mb-4">
+      <span className="text-xl">
+        <i className="fa-solid fa-envelope"></i>
+      </span>
+      <span className="text-lg">{info.email}</span>
+    </div>
+
+    <div className="mt-12">
+      <h2 className="text-lg font-semibold">{t("register.register20")}</h2>
+      <div className="space-y-2 mt-4">
+        <p className="text-sm">Lot 24 Ltd</p>
+        <p className="text-sm">{info.company_info}</p>
+        <p className="text-sm">Company number: {info.phone || "N/A"}</p>
+      </div>
+    </div>
+  </div>
+))}
+
+
 
             {/* Contact Form */}
             <div className="lg:w-1/2">
@@ -107,8 +150,8 @@ const CustomerService = () => {
                   />
                   <CustomerServiceInput
                     id="message"
-                    name="message"
-                    value={formData.message}
+                    name="massage"
+                    value={formData.massage}
                     handleChange={handleChange}
                     placeholder="Your message"
                     rows="4"
@@ -125,9 +168,7 @@ const CustomerService = () => {
                       className="h-4 w-4 border-gray-300 rounded"
                     />
                     <label htmlFor="consent" className="text-sm">
-                      I hereby consent to the processing of my personal data in
-                      accordance with the Act on the protection of personal data
-                      in connection with the execution of the application.
+                    {t("register.register21")}
                     </label>
                   </div>
 

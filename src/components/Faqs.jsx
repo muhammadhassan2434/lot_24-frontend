@@ -1,16 +1,20 @@
+import { useTranslation } from "react-i18next";
+import WhatsAppButton from "./WhatsAppButton";
+
 const Faqs = ({ activeFaq, toggleFaq }) => {
+  const { t, i18n } = useTranslation();
   return (
     <>
+    <WhatsAppButton/>
      <div className="my-5 m-auto  max-w-[1280px]">
         <h1 className="text-center font-bold text-4xl">
-          Frequently Asked Questions
+        { t("register.register13")}
         </h1>
         <div className="container mx-auto my-5 space-y-4">
           {[
             {
-              question: "How can a seller open an account?",
-              answer:
-                'Sellers can open an account by clicking on the "Register" button at the top right of the page, then selecting the "Seller" option during the registration process.',
+              question: t("faq.faq1"),
+              answer:t("faq.faq2"),
             },
             {
               question: "How do I purchase products as a buyer?",

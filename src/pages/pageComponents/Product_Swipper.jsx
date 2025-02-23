@@ -8,8 +8,13 @@ import "swiper/css/navigation";
 import { FreeMode, Pagination, Navigation } from "swiper/modules";
 import Product_component from "./Product_component";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Product_Swipper = ({ heading, link, products }) => {
+  const { t, i18n } = useTranslation();
+
+  // console.log(products)
+
   return (
     <>
       <div className="p-4 md:py-4 md:px-0 my-4">
@@ -17,7 +22,7 @@ const Product_Swipper = ({ heading, link, products }) => {
           <h1 className="text-red-600 text-3xl font-bold flex justify-between md:flex-row flex-col items-center">
             {heading}
             <Link href={link} className="text-blue-500 text-lg">
-              View More <i className="fa-solid fa-angles-right m-0 p-0"></i>
+            {t("view.view1")} <i className="fa-solid fa-angles-right m-0 p-0"></i>
             </Link>
           </h1>
           <div className="p-4 my-4">

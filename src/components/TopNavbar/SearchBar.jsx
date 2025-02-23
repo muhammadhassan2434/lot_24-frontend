@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import lot24Logo from "../../assets/images/logo.png";
+import axios from "axios";
+
 
 const SearchBar = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  console.log(searchTerm)
+  console.log(searchResults)
 
   const token = localStorage.getItem("auth_token");
 
@@ -16,18 +24,54 @@ const SearchBar = () => {
     setSelectedProduct(event.target.value);
   };
 
+  const fetchSearchResults = async (query) => {
+    if (query.length > 2) {
+      try {
+        const response = await axios.get(
+          `https://api.lot24.ma/api/product-search?search=${query}`
+        );
+        console.log("Fetched products:", response.data);
+  
+        // Ensure we store only matching products
+        const filteredResults = response.data.data.filter((product) =>
+          product.title.toLowerCase().includes(query.toLowerCase())
+        );
+  
+        setSearchResults(filteredResults);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        setSearchResults([]); // Clear results on error
+      }
+    } else {
+      setSearchResults([]); // Clear results if query is too short
+    }
+  };
+  
+  
+  // Handle input change
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchTerm(query);
+    fetchSearchResults(query);
+  };
+  const handleProductSelect = (product) => {
+    setSelectedProduct(product);
+    setSearchTerm(product.name);
+    setSearchResults([]); // Hide suggestions after selection
+  }
+
   return (
     <>
       <div className="container mx-auto max-w-[1280px] flex flex-col lg:flex-row items-center justify-between">
         {/* Top Row for Logo and Profile Login/Sign Up */}
         <div className="flex items-center justify-between w-full lg:w-fit">
           {/* Logo */}
-          <div className="flex items-center md:mr-4 mt-3 w-[50px]">
+          <div className="flex items-center md:mr-4">
             <Link to="/">
               <img
-                src="/src/assets/images/lot24Logo.png"
+                src={lot24Logo}
                 alt="lot 24"
-                className="w-full 2xl:w-[300px]"
+                className="w-[100px] md:w-[150px] h-[160px]" // Adjust sizes as needed
               />
             </Link>
           </div>
@@ -64,50 +108,30 @@ const SearchBar = () => {
             </div>
             <div>
               <Link to="#">
-                <i
+                {/* <i
                   className="fa-solid fa-cart-shopping text-[20px] text-[#299BCC] border border-gray-500 p-2 rounded-full"
                   style={{ transform: "rotateY(180deg)" }}
-                ></i>
+                ></i> */}
               </Link>
             </div>
           </div>
         </div>
 
         {/* Search Bar - Stacked on mobile */}
-        <div className="w-full flex items-center justify-center mt-3">
-          <div className="flex items-center border border-gray-300 overflow-hidden  w-full lg:max-w-md xl:max-w-lg mr-4">
-            <div className="relative">
-              {/* Dropdown Select for Products */}
-              {/* <select
-                value={selectedProduct}
-                onChange={handleProductChange}
-                className="bg-none text-gray-700   px-4 py-2 min-w-[150px]  2xl:min-w-[200px]  font-semibold outline-none w-full border-r"
-              >
-                <option value="products" className="">
-                  Products
-                </option>
-                <option value="stockOffers" className="">
-                  Stock offers
-                </option>
-                <option value="topOffers" className="">
-                  Top offers
-                </option>
-              </select> */}
-            </div>
+        <div className="relative w-full lg:max-w-md xl:max-w-lg mr-4 flex">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="h-full px-4 py-2 w-full outline-none border border-gray-300"
+          placeholder="Search Product"
+        />
+        <button className="bg-[#299BCC] text-white h-full px-4 py-2">
+          <i className="fas fa-search"></i>
+        </button>
 
-            {/* Search Input */}
-            <input
-              type="text"
-              className="h-full px-4 py-2  w-full outline-none"
-              placeholder="Search Product"
-            />
-
-            {/* Search Button */}
-            <button className="bg-[#299BCC] text-white h-full px-4 py-2 ">
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
+       
+      </div>
 
         {/* Profile Login / Sign Up for larger screens */}
         <div className="hidden lg:flex items-center 2xl:gap-2 min-w-[300px] 2xl:min-w-fit mt-3">
@@ -142,10 +166,10 @@ const SearchBar = () => {
 
           <div>
             <Link to="#">
-              <i
+              {/* <i
                 className="fa-solid fa-cart-shopping text-[18px] text-[#299BCC] border border-gray-500 p-2 ml-2 2xl:ml-4 rounded-full 2xl:p-4"
                 style={{ transform: "rotateY(180deg)" }}
-              ></i>
+              ></i> */}
             </Link>
           </div>
         </div>

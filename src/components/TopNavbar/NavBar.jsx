@@ -1,19 +1,57 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+// NavBar Component
+import React, { useEffect, useState, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { CurrencyContext } from "../../hooks/CurrencyContext";
+import { countries } from "../../utils/flags";
+import AuthContext from "../../store/AuthContext";
 
 const NavBar = () => {
+  const { t, i18n } = useTranslation();
   const token = localStorage.getItem("auth_token");
   const [navbarColor, setNavbarColor] = useState("#2a2a2a");
+  const [exchangeRates, setExchangeRates] = useState({});
+  const { userData } = useContext(AuthContext);
+  const { currency, changeCurrency } = useContext(CurrencyContext);
+
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.lot24.ma/api/currency-rates"
+        );
+        setExchangeRates(response.data.rates);
+      } catch (error) {
+        console.error("Error fetching currency rates:", error);
+      }
+    };
+
+    fetchRates();
+  }, []);
+
+  const handleCurrencyChange = (selectedCurrency) => {
+    if (exchangeRates[selectedCurrency]) {
+      changeCurrency(selectedCurrency, exchangeRates[selectedCurrency]);
+    }
+  };
+
+  const handleCountryChange = (country) => {
+    // Extract language code from the country name
+    const languageCode = country.name.split(".")[1];
+    i18n.changeLanguage(languageCode);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
-    window.location.reload(); // Reload the page to reflect changes
+    window.location.reload();
   };
+
   const [dropdowns, setDropdowns] = useState({
     buyer: false,
     seller: false,
     currency: false,
+    country: false,
   });
 
   const toggleDropdown = (type) => {
@@ -23,166 +61,164 @@ const NavBar = () => {
     }));
   };
 
-  useEffect(() => {
-    const fetchColors = async () => {
-      try {
-        const response = await axios.get("https://api.lot24.ma/api/color/list");
-        // console.log(response.data); // Log the response data
-        const navbarColorData = response.data.find((color) => color.title.toLowerCase() === "navbar");
-        if (navbarColorData) {
-          setNavbarColor(navbarColorData.color); // Set the navbar color
-        }
-      } catch (error) {
-        console.error("Error fetching colors:", error.response?.data || error.message);
-      }
-    };
-
-    fetchColors();
-  }, []);
-
   const closeAllDropdowns = () => {
     setDropdowns({
       buyer: false,
       seller: false,
       currency: false,
+      country: false,
     });
   };
 
+  const availableCurrencies = ["EUR", "USD", "GBP", "CNY", "TRY"];
+
   return (
-    
     <div className="lg:px-24" style={{ backgroundColor: navbarColor }}>
-      <div className="container mx-auto flex justify-between items-center max-w-[1280px]">
+      <div className="container mx-auto lg:flex justify-between items-center max-w-[1280px]">
         <div className="flex items-center gap-6">
-          {/* Buyer Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => toggleDropdown("buyer")}
-            onMouseLeave={closeAllDropdowns}
-          >
-            <button
-              className="text-white py-2 px-4 focus:outline-none"
-              onClick={() => toggleDropdown("buyer")}
+          <Link className="block px-4 py-2 text-white " to="/register">
+            Buyer Registration
+          </Link>
+          <Link className="block px-4 py-2 text-white " to="/register">
+            Seller Registration
+          </Link>
+          {userData?.role === "buyer" && (
+            <div
+              className="relative"
+              onMouseEnter={() => toggleDropdown("buyer")}
+              onMouseLeave={closeAllDropdowns}
             >
-              For Buyer
-            </button>
-            {dropdowns.buyer && (
-              <ul className="absolute left-0 overflow-hidden w-48 bg-white rounded-md shadow-lg z-10">
-                <li>
-                  <Link
-                    className="block px-4 py-2 hover:bg-gray-300"
-                    to="/buyer"
-                  >
-                    General Information
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block px-4 py-2 hover:bg-gray-300"
-                    to="/register"
-                  >
-                    Registration
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </div>
+              <button
+                className="text-white py-2 px-4 focus:outline-none"
+                onClick={() => toggleDropdown("buyer")}
+              >
+                Buyer Dashboard
+              </button>
+              {dropdowns.buyer && (
+                <ul className="absolute left-0 overflow-hidden w-48 bg-white rounded-md shadow-lg z-10">
+                  <li>
+                    <Link
+                      className="block px-4 py-2 hover:bg-gray-300"
+                      to="/buyer"
+                    >
+                      Buyer dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-4 py-2 hover:bg-gray-300"
+                      to="/register"
+                    >
+                      {t("header.header5")}
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
 
-          {/* Seller Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => toggleDropdown("seller")}
-            onMouseLeave={closeAllDropdowns}
-          >
-            <button
-              className="text-white py-2 px-4  focus:outline-none"
-              onClick={() => toggleDropdown("seller")}
+          {userData?.role === "seller" && (
+            <div
+              className="relative"
+              onMouseEnter={() => toggleDropdown("seller")}
+              onMouseLeave={closeAllDropdowns}
             >
-              For Seller
-            </button>
-            {dropdowns.seller && (
-              <ul className="absolute left-0 overflow-hidden w-48 bg-white rounded-md shadow-lg z-10">
-                <li>
-                  <Link
-                    className="block px-4 py-2 hover:bg-gray-300"
-                    to="/seller"
-                  >
-                    General Information
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block px-4 py-2 hover:bg-gray-300"
-                    to="/register"
-                  >
-                    Registration
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </div>
-          {/* Seller Login */}
-          <div className="relative">
-          <div>
-      {token ? (
-        // Show logout button if token is present
-        <button
-          onClick={handleLogout}
-          className="text-white px-4 py-2 rounded-lg"
-        >
-          {/* Logout */}
-        </button>
-      ) : (
-        // Show login/register section if token is not present
-        <Link
-              to={"/seller/login"}
-              className="text-white py-2 px-4  focus:outline-none"
+              <button
+                className="text-white py-2 px-4 focus:outline-none"
+                onClick={() => toggleDropdown("seller")}
+              >
+                Seller Dashboard
+              </button>
+              {dropdowns.seller && (
+                <ul className="absolute left-0 overflow-hidden w-48 bg-white rounded-md shadow-lg z-10">
+                  <li>
+                    <Link
+                      className="block px-4 py-2 hover:bg-gray-300"
+                      to="/seller"
+                    >
+                      Seller Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-4 py-2 hover:bg-gray-300"
+                      to="/register"
+                    >
+                      {t("header.header5")}
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
+          {!token && (
+            <Link
+              to="/seller/login"
+              className="text-white hover:text-white hidden md:block"
             >
-              Seller Login
+              {t("register.register16")}
             </Link>
-      )}
-    </div>
-
-            
-          </div>
-
-          {/* Contact Link */}
+          )}
           <Link
             to="/contact"
             className="text-white hover:text-white hidden md:block"
           >
-            Contact Lot24
+            {t("register.register17")}
           </Link>
         </div>
-        {/* Currency Dropdown */}
-        <div
-          className="relative"
-          onMouseEnter={() => toggleDropdown("currency")}
-          onMouseLeave={closeAllDropdowns}
-        >
-          <button
-            className="text-white py-2 px-4 focus:outline-none"
-            onClick={() => toggleDropdown("currency")}
+        <div className="flex">
+          <div
+            className="relative  mr-5"
+            onMouseEnter={() => toggleDropdown("country")}
+            onMouseLeave={closeAllDropdowns}
           >
-            <i className="fas fa-dollar-sign mr-1"></i> Currency
-          </button>
-          {dropdowns.currency && (
-            <ul className="absolute left-0 bg-white z-20 overflow-hidden w-48 2xl:w-64 rounded-md shadow-lg">
-              {[
-                { label: "USD", icon: "fa-dollar-sign" },
-                { label: "EUR", icon: "fa-euro-sign" },
-                { label: "GBP", icon: "fa-pound-sign" },
-                { label: "JPY", icon: "fa-yen-sign" },
-                { label: "INR", icon: "fa-rupee-sign" },
-              ].map((currency, index) => (
-                <li key={index}>
-                  <Link className="block px-4 py-2 hover:bg-gray-300" to="#">
-                    <i className={`fas ${currency.icon} mr-1`}></i>{" "}
-                    {currency.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+            <button
+              className="text-white py-2 px-4 focus:outline-none"
+              onClick={() => toggleDropdown("country")}
+            >
+              <i className="fas fa-flag mr-1"></i> {t("selectCountry")}
+            </button>
+            {dropdowns.country && (
+              <ul className="absolute left-0 bg-white z-20 overflow-hidden w-48 2xl:w-64 rounded-md shadow-lg">
+                {countries.map((country, index) => (
+                  <li key={index}>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-300"
+                      onClick={() => handleCountryChange(country)}
+                    >
+                      {t(country.name)}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div
+            className="relative mx-5"
+            onMouseEnter={() => toggleDropdown("currency")}
+            onMouseLeave={closeAllDropdowns}
+          >
+            <button
+              className="text-white py-2 px-4 focus:outline-none"
+              onClick={() => toggleDropdown("currency")}
+            >
+              <i className="fas fa-dollar-sign mr-1"></i> {currency}
+            </button>
+            {dropdowns.currency && (
+              <ul className="absolute left-0 bg-white z-20 overflow-hidden w-48 2xl:w-64 rounded-md shadow-lg">
+                {availableCurrencies.map((cur, index) => (
+                  <li key={index}>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-300"
+                      onClick={() => handleCurrencyChange(cur)}
+                    >
+                      {cur}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </div>

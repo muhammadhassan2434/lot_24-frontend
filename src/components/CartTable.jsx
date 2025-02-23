@@ -3,9 +3,11 @@ import React from 'react';
 const CartTable = ({ items }) => {
   const calculateTotal = () => {
     return items.reduce((total, item) => {
-      return total + item.grossPrice;
+      const grossPrice = parseFloat(item.grossPrice) || 0; // Ensure it's a valid number
+      return total + grossPrice;
     }, 0);
   };
+  
 
   return (
     <table className="w-full border-collapse border">

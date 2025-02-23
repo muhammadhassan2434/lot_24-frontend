@@ -6,6 +6,7 @@ const API_DOMAIN = 'https://api.lot24.ma/api/';
 export const API_ENDPOINTS = {
     PRODUCT: {
         GET_ALL_PRODUCTS: API_DOMAIN + 'get-product',
+        SEARCH_PRODUCT: API_DOMAIN + 'get-product?search=',
         GET_Catrgory: API_DOMAIN + 'category',
         GET_SubCatrgory: API_DOMAIN + 'get-subcategory',
         GET_Brand: API_DOMAIN + 'brand',
@@ -26,6 +27,12 @@ export const API_ENDPOINTS = {
         getPopularSearches: API_DOMAIN + 'popularsearch/list', // chat id as param
         getopBar: API_DOMAIN + 'topbar/list', // chat id as param
         getBlogs: API_DOMAIN + 'blog/list', // chat id as param
+        getSocialMedia: API_DOMAIN + 'get-socialmedia', // chat id as param
+        getTermsAndCondition: API_DOMAIN + 'Terms/condition/page', // chat id as param
+        getRefundPolicy: API_DOMAIN + 'Refund/Policy/page', // chat id as param
+        getPrivacyPolicy: API_DOMAIN + 'Privacy/Policy/page', // chat id as param
+        getAboutUs: API_DOMAIN + 'Aboutus/page', // chat id as param
+        getContactInfo: API_DOMAIN + 'get/contactInfo', // chat id as param
     },
     SUBCRIPTION: {
         SHOW_Subcription: API_DOMAIN + 'show-subscription',

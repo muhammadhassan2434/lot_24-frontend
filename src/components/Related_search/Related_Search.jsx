@@ -1,11 +1,13 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const Related_Search = () => {
+  const { t, i18n } = useTranslation();
   return (
     <div className="p-4 max-w-[1280px] md:px-0 container mx-auto">
       <div className="container mx-auto row">
-        <div className="col-md-2 font-bold p-3 text-2xl ">Related Search</div>
+        <div className="col-md-2 font-bold p-3 text-2xl ">{t("header.header10")}</div>
         <div className="col-md-10 columns-3 p-3 capitalize font-semibold text-gray-500">
           <Link
             to={"/products"}

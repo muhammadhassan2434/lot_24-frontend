@@ -8,6 +8,7 @@ import useFetchProducts from "../hooks/useFetchProducts";
 import { authSellerProducts } from "../utils/mutations/productMutation"; // Import the correct API function
 import { useSelector } from "react-redux";
 import { useAuthContext } from "../hooks/useAuthContext";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 const ShowProducts = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -51,6 +52,7 @@ const {userData}= useAuthContext()
   return (
     <>
       <TopNavbar />
+      <WhatsAppButton/>
       <div className="flex max-w-[1280px] m-auto">
         {/* Sidebar */}
         <div

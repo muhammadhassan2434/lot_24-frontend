@@ -13,8 +13,8 @@ import {
 } from "../../utils/mutations/productMutation";
 import useFetchProducts from "../../hooks/useFetchProducts";
 import { toast, ToastContainer } from "react-toastify";
-import { Toast } from "react-bootstrap";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import axios from "axios";
 // import { storeProduct } from "../../store/productActions";
 // import { useDispatch } from "react-redux";
 
@@ -23,12 +23,13 @@ const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   // const [mainTitle, setTitle] = useState("");
+  const [subcategories, setSubcategories] = useState([]);
   // const [mainContent, setContent] = useState("");
   const [selectedTab, setSelectedTab] = useState("/dashboard"); // Default selected tab
-  const { userData , currState} = useAuthContext()
-  const navigate = useNavigate()
-  
-  // console.log(userData)
+  const navigate = useNavigate();
+  const { userData, currState } = useAuthContext();
+
+  console.log(userData?.id);
 
   const {
     data: categories = [],
@@ -43,10 +44,11 @@ const Layout = () => {
   // console.log(Countries[0].name)
 
   const [formData, setFormData] = useState({
-    seller_id: "",
+    seller_id: userData?.id,
     title: "",
     description: "",
     category_id: "",
+    subcategory: "",
     regular_price: "",
     sale_price: "",
     wholesale_price: "",
@@ -63,26 +65,43 @@ const Layout = () => {
     // delivery_options: "",
     // brand_id: "",
   });
+
   useEffect(() => {
-    console.log(currState)
-    if(currState === "loggedOut"){
-      navigate ('/login')
+    const fetchSubcategories = async () => {
+      if (formData.category_id) {
+        try {
+          const response = await axios.get(
+            `https://api.lot24.ma/api/subcategory/${formData.category_id}`
+          );
+          console.log("Fetched Subcategories:", response.data); // Check the response structure
+          // Ensure response.data is an array and set accordingly
+          setSubcategories(
+            Array.isArray(response.data)
+              ? response.data
+              : response.data.data || []
+          );
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+        }
+      } else {
+        setSubcategories([]); // Clear subcategories if no category is selected
+      }
+    };
+    fetchSubcategories();
+  }, [formData.category_id]);
+
+  useEffect(() => {
+    console.log(currState);
+    if (currState === "loggedOut") {
+      navigate("/login");
     }
-    if (userData?.id) {
-      setFormData((prevState) => ({
-        ...prevState,
-        seller_id: userData.id,
-      }));
-    }
+    // if (userData?.id) {
+    //   setFormData((prevState) => ({
+    //     ...prevState,
+    //     seller_id: userData.id,
+    //   }));
+    // }
   }, [userData, currState]);
-
-  // const getTitle = (title) => {
-  //   setTitle(title);
-  // }
-
-  // const getContent = (content) => {
-  //   setContent(content);
-  // }
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -91,13 +110,13 @@ const Layout = () => {
       [name]: type === "checkbox" ? checked : type === "file" ? files : value,
     }));
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Create a FormData instance
     const formDataObj = new FormData(e.target);
-  
+
     // Append all form data
     Object.keys(formData).forEach((key) => {
       if (key === "image") {
@@ -109,22 +128,22 @@ const Layout = () => {
         formDataObj.append(key, formData[key]);
       }
     });
-  
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/store-product", {
+      const response = await fetch("https://api.lot24.ma/api/store-product", {
         method: "POST",
         body: formDataObj, // Do not include `Content-Type` headers; FormData handles it
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok && result.status) {
-        console.log("Product Stored Successfully:", result);
+        // console.log("Product Stored Successfully:", result);
         toast.success("Product stored successfully!");
-  
+
         // Reset the form data
         setFormData({
-          seller_id: "",
+          seller_id: userData?.id || "",
           title: "",
           description: "",
           category_id: "",
@@ -149,7 +168,6 @@ const Layout = () => {
       toast.error("Failed to store the product. Please try again.");
     }
   };
-  
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab); // Update the selected tab
@@ -203,18 +221,7 @@ const Layout = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="px-7 mt-6">
-              {/* <DataForm setTitleHandler={getTitle} setContentHandler={getContent} /> */}
-              {/* <input type="hidden" name="seller_id" id="" value={userData.id} /> */}
-
               <div className="">
-                <h3 className="font-bold text-lg">Price</h3>
-                <SellerInput
-                  // label="Title"
-                  type="hidden"
-                  name="seller_id"
-                  value={formData.seller_id}
-                  onChange={handleChange}
-                />
                 <SellerInput
                   label="Title"
                   type="text"
@@ -240,7 +247,21 @@ const Layout = () => {
                   value={formData.category_id}
                   onChange={handleChange}
                 />
-
+                <SellerInput
+                  label="Sub Category"
+                  type="select"
+                  name="subcategory"
+                  options={
+                    Array.isArray(subcategories)
+                      ? subcategories.map((subCat) => ({
+                          value: subCat.id,
+                          label: subCat.name,
+                        }))
+                      : []
+                  } // Ensure it's an array before mapping
+                  value={formData.subcategory}
+                  onChange={handleChange}
+                />
                 <SellerInput
                   label="Regular price ($)"
                   type="number"
@@ -327,12 +348,12 @@ const Layout = () => {
                   onChange={handleChange}
                 />
                 <SellerInput
-                label="Images"
-                type="file"
-                name="image"
-                multiple // Enable multiple file selection
-                onChange={handleChange}
-              />
+                  label="Images"
+                  type="file"
+                  name="image"
+                  multiple // Enable multiple file selection
+                  onChange={handleChange}
+                />
               </div>
               <button
                 type="submit"

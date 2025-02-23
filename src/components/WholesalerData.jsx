@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {  useNavigate } from "react-router-dom";
 
 const WholesalerData = ({ product, isDetailInitial }) => {
+  const { t, i18n } = useTranslation();
   const [isDetail, setIsDetail] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ const WholesalerData = ({ product, isDetailInitial }) => {
   if (!product || !product.seller) {
     return (
       <div className="p-3 w-full md:w-[30%] bg-gray-50 rounded">
-        <h1 className="text-2xl font-bold text-blue-500">Wholesaler's data</h1>
+        <h1 className="text-2xl font-bold text-blue-500">{t("header.header8")}</h1>
         <p>No product or seller data available.</p>
       </div>
     );
@@ -34,7 +36,7 @@ const WholesalerData = ({ product, isDetailInitial }) => {
   return (
     <div className="p-3 w-full md:w-[30%] bg-gray-50 rounded">
       <div className="sticky top-0">
-        <h1 className="text-2xl font-bold text-blue-500">Wholesaler's data</h1>
+        <h1 className="text-2xl font-bold text-blue-500">{t("header.header8")}</h1>
         <h2 className="text-lg">{product.seller.name || "N/A"}</h2>
         <h3 className="text-green-500 mt-2">
           <i className="fa-solid fa-check pr-1"></i> Verified Seller
@@ -94,7 +96,7 @@ const WholesalerData = ({ product, isDetailInitial }) => {
               onClick={handleViewDetails}
               className="z-10 btn bg-yellow px-6 py-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
             >
-              <i className="fa-solid fa-eye pr-1 text-white"></i> View Details
+              <i className="fa-solid fa-eye pr-1 text-white"></i> {t("header.header9")}
             </button>
             <div className="blur-sm">
               {/* Placeholder blurred content */}

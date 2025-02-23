@@ -1,6 +1,8 @@
 import React from "react";
 import { categoriesSelection } from "../../utils/categories";
+import { useTranslation } from "react-i18next";
 const News = () => {
+   const { t, i18n } = useTranslation();
   // newsletter category
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [selectedCategories, setSelectedCategories] = React.useState([]);
@@ -22,9 +24,9 @@ const News = () => {
           <div className=" flex items-center md:text-left 2xl:gap-8">
             <i className="fa fa-envelope text-6xl text-gray-200 mr-2 "></i>
             <div>
-              <h2 className="text-xl font-bold">Free Lot24 NEWSLETTER</h2>
+              <h2 className="text-xl font-bold">{t("tags.tags8")}</h2>
               <p className="mt-2 md:mt-0">
-                Daily updates about new products and news about Lot24.
+              {t("tags.tags12")}
               </p>
             </div>
           </div>
@@ -71,8 +73,7 @@ const News = () => {
               </button>
             </div>
             <p className="text-gray-400 max-w-[450px] mt-6">
-              By subscribing to our newsletter, you consent to the processing of
-              your personal data for marketing purposes.
+            {t("tags.tags9")}
             </p>
           </div>
         </div>

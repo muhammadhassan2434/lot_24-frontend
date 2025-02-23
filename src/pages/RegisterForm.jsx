@@ -7,11 +7,14 @@ import RightSideBarForm from "../components/RightSideBarForm";
 import FlashSales from "../components/FlashSales";
 import InputField from "../components/InputField";
 import axios from "axios";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 const RegisterForm = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const subscriptionId = queryParams.get("subscriptionId");
+  const [errors, setErrors] = useState(null);
+  console.log(errors)
 
   const navigate = useNavigate();
   const [isPassword, setIspassword] = React.useState(false);
@@ -26,13 +29,14 @@ const RegisterForm = () => {
     country_code: "",
     phone_number: "",
     country: "",
-    // company_name: "",
-    // tax_number: "",
-    // street_address: "",
-    // postal_code: "",
-    // city: "",
-    // invoice: false,
-    role: "",  // Add role field to store either "seller" or "buyer"
+    company_name: "",
+    tax_number: "",
+    street_address: "",
+    postal_code: "",
+    city: "",
+    coupon_code: "",
+    invoice: false,
+    role: "", // Add role field to store either "seller" or "buyer"
   });
 
   const handleChange = (e) => {
@@ -61,25 +65,48 @@ const RegisterForm = () => {
       subscription_id: subscriptionId, // Include subscriptionId if needed
     };
 
-    try {
-      // Submit form data to the API endpoint
-      console.log(formPayload)
-      const response = await axios.post("https://api.lot24.ma/api/store-account", formPayload);
+    // console.log(formData)
 
-      // Handle success response (you can perform actions like showing a success message)
-      navigate('/add_to_cart');
-      console.log("Form submitted successfully", response.data);
-      // Optionally, redirect to another page or show success message
-    } catch (error) {
-      // Handle error response (e.g., show an error message)
-      console.error("Error submitting form:", error);
-    }
+    try {
+      const response = await axios.post(
+        "https://api.lot24.ma/api/store-account",
+        formPayload
+      );
+
+
+      console.log(response.data)
+
+      const {
+        subscription_name,
+        subscription_price,
+        coupon_price,
+        discount_price,
+      } = response.data;
+
+      // Navigate to the Add to Cart page with data
+      navigate("/add_to_cart", {
+        state: {
+          subscriptionName: subscription_name,
+          subscriptionPrice: subscription_price,
+          couponPrice: coupon_price,
+          discountPrice: discount_price,
+        },
+      });
+    } catch (err) {
+      if (err.response) {
+          // Server responded with a status other than 2xx
+          setErrors(err.response || "Something went wrong");
+      } else {
+        setErrors("Network error, please try again");
+      }
+  }
   };
 
   return (
     <>
       <RegisterTopNavBar />
-      <FlashSales />
+      <WhatsAppButton/>
+      {/* <FlashSales /> */}
 
       {/* form */}
       <div className="p-3 md:p-[50px] bg-gray-100">
@@ -92,10 +119,15 @@ const RegisterForm = () => {
             </p>
             <hr className="my-4" />
             <div className="form-can">
-              <form onSubmit={handleSubmit}> {/* Add onSubmit handler */}
+              <form onSubmit={handleSubmit}>
+                {" "}
+                {/* Add onSubmit handler */}
                 {/* Basic info */}
-                <input type="hidden" name="subscription_id" value={subscriptionId} />
-
+                <input
+                  type="hidden"
+                  name="subscription_id"
+                  value={subscriptionId}
+                />
                 <div className="Basic-info grid md:grid-cols-12 gap-3">
                   <div className="text-xl font-bold col-span-3">
                     Basic Information
@@ -127,8 +159,11 @@ const RegisterForm = () => {
                       required
                       placeholder="Enter email"
                       value={formData.email}
+                      error={errors?.data?.error?.email?.[0] || ""}
                       onChange={handleChange}
                     />
+                    
+                    
                     <InputField
                       label="Password"
                       type="password"
@@ -174,7 +209,7 @@ const RegisterForm = () => {
                       onChange={handleChange}
                     />
                     {/* invoice record */}
-                    {/* <div className="w-full mt-5 align-middle">
+                    <div className="w-full mt-5 align-middle">
                       <InputField
                         label="I want Invoice"
                         type="checkbox"
@@ -232,15 +267,15 @@ const RegisterForm = () => {
                           onChange={handleChange}
                         />
                       </>
-                    )} */}
+                    )}
                   </div>
                 </div>
                 <hr className="my-4" />
-
                 {/* Role info */}
                 <div className="Basic-info grid md:grid-cols-12 gap-3">
                   <div className="text-lg font-bold col-span-3">
-                    On Merkandi I want to <span className="text-red-500">*</span>
+                    On Merkandi I want to{" "}
+                    <span className="text-red-500">*</span>
                   </div>
                   <div className="col-span-9 flex flex-wrap">
                     <div>
@@ -251,7 +286,9 @@ const RegisterForm = () => {
                         checked={formData.role === "seller"}
                         onChange={handleRoleChange}
                       />
-                      <label htmlFor="seller" className="ml-2">Sell</label>
+                      <label htmlFor="seller" className="ml-2">
+                        Sell
+                      </label>
                     </div>
                     <div>
                       <input
@@ -261,8 +298,10 @@ const RegisterForm = () => {
                         checked={formData.role === "buyer"}
                         onChange={handleRoleChange}
                       />
-                      <label htmlFor="buyer" className="ml-2">Buy</label>
-                    </div> 
+                      <label htmlFor="buyer" className="ml-2">
+                        Buy
+                      </label>
+                    </div>
                     <span className="text-sm text-gray-500">
                       Thanks to this information, we will personalize your
                       experience on our platform
@@ -270,7 +309,6 @@ const RegisterForm = () => {
                   </div>
                 </div>
                 <hr className="my-4" />
-
                 {/* Terms and Conditions */}
                 <div className="Basic-info grid md:grid-cols-12 gap-3">
                   <div className="text-lg font-bold col-span-3">
@@ -288,9 +326,30 @@ const RegisterForm = () => {
                     />
                   </div>
                 </div>
-
                 <hr className="my-4" />
-
+                {/* <label htmlFor="coupon_code">Apply Coupon Code</label> */}
+                <InputField
+                      label="Apply Coupon Code"
+                      name="coupon_code"
+                      id="coupon_code"
+                      placeholder="Enter Cpupon Code"
+                      value={formData.coupon_code}
+                      error={errors?.data?.error?.coupon_code?.[0] || ""}
+                      onChange={handleChange}
+                    />
+     
+      {/* {errors?.data && (
+    <p className="text-red-500 text-sm">{errors.data.message}</p>
+  )} */}
+                <hr className="my-4" />
+                {errors && (
+                  <div className="errors">
+          {/* <h2>Errors:</h2>a */}
+          {/* <p className="text-red-500 text-sm">{errors.message}</p> */}
+          {errors && <p style={{ color: "red" }}>{errors.data.message}</p>}
+        </div>
+      )}
+                <hr className="my-4" />
                 {/* Button */}
                 <div className="flex items-center justify-end p-4">
                   <button

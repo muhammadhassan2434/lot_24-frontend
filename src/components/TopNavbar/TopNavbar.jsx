@@ -4,8 +4,10 @@ import SearchBar from "./SearchBar";
 import NavBar from "./NavBar";
 import Category from "./Category";
 import Testing from "./Testing";
+import { useTranslation } from "react-i18next";
 
 const TopNavbar = () => {
+   const { t, i18n } = useTranslation();
   return (
     <>
       {/* Top Sale Bar */}
@@ -27,28 +29,28 @@ const TopNavbar = () => {
           >
             <i className="fa-solid fa-globe text-[30px] text-[#F4B033]"></i>
             <h1 className="text-sm font-semibold">
-              The best stocklot offers from 150 countries
+            {t("topbar.top1")}
             </h1>
           </div>
           {/* Info Item 2 */}
           <div className="flex items-center gap-3 text-gray-600 cursor-pointer w-full sm:w-1/2 lg:w-1/4 text-center lg:text-left p-2">
             <i className="fa-solid fa-user-group text-[30px] text-[#F4B033]"></i>
             <h1 className="text-sm font-semibold ">
-              More than 100,000 satisfied users
+            {t("topbar.top2")}
             </h1>
           </div>
           {/* Info Item 3 */}
           <div className="flex items-center gap-3 text-gray-600 cursor-pointer w-full sm:w-1/2 lg:w-1/4 text-center lg:text-left p-2">
             <i className="fa-solid fa-percent text-[30px] text-[#F4B033]"></i>
             <h1 className="text-sm font-semibold">
-              Offers cheaper by up to 90%
+            {t("topbar.top3")}
             </h1>
           </div>
           {/* Info Item 4 */}
           <div className="flex items-center gap-3 text-gray-600 cursor-pointer w-full sm:w-1/2 lg:w-1/4 text-center lg:text-left p-2">
             <i className="fa-solid fa-handshake text-[30px] text-[#F4B033]"></i>
             <h1 className="text-sm font-semibold">
-              Direct contact to resellers and wholesalers
+            {t("topbar.top4")}
             </h1>
           </div>
         </div>
@@ -56,7 +58,7 @@ const TopNavbar = () => {
 
       {/* 5th Category Bar */}
       {/* <Category /> */}
-      <Testing />
+      <Testing  />
     </>
   );
 };

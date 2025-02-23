@@ -1,7 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import ProductDescription from "./ProductDescription";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ProductModal from "./ProductModal";
+import { useTranslation } from "react-i18next";
+import { CurrencyContext } from "../hooks/CurrencyContext";
 
 const ProductDetail = ({
   sellerId,
@@ -15,10 +17,15 @@ const ProductDetail = ({
   phoneNo,
   details,
 }) => {
+  const { t, i18n } = useTranslation();
+  const { currency, conversionRate } = useContext(CurrencyContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
   };
+  
+  const convertedPrice = (price * conversionRate).toFixed(2);
+  // const convertRegularPrice = (product.regular_price * conversionRate).toFixed(2);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -54,7 +61,7 @@ const ProductDetail = ({
 
       {/* Price Section */}
       <div className="price-can py-4 flex flex-wrap gap-2 items-end">
-        <span className="text-red-500 text-2xl font-extrabold">{`$${price}`}</span>
+        <span className="text-red-500 text-2xl font-extrabold">{`${convertedPrice}`} {currency}</span>
         <span className="text-gray-400 pb-1">{pricePerPiece}</span>
         <span className="text-green-500 pb-1">{priceExclVat}</span>
       </div>
@@ -92,14 +99,14 @@ const ProductDetail = ({
             onClick={handelPhoneClick}
             className=" border-2	border-yellow-500 p-2  text-yellow-400 hover:bg-yellow-500 hover:text-white"
           >
-            Phone
+           { t("register.register1")}
           </button>
           <button
             // to={`/${sellerId}/buyerChat`}
             onClick={handleButtonClick}
             className="border-2 border-yellow-500 p-2 mx-3 text-yellow-400 hover:bg-yellow-500 hover:text-white"
           >
-            Message
+            { t("register.register2")}
           </button>
         </div>
         {isModalOpen && (

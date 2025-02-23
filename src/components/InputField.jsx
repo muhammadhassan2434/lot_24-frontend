@@ -11,6 +11,7 @@ const InputField = ({
   isPasswordToggle = false,
   value,
   onChange,
+  error,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -98,6 +99,7 @@ const InputField = ({
           )}
         </div>
       )}
+      <p className="text-red-500 text-sm">{error}</p>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import Pusher from "pusher-js";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { getChatDetails } from "../utils/queries/productQurires";
+import WhatsAppButton from "./WhatsAppButton";
 
 export const SellerChat = () => {
   const location = useLocation();
@@ -27,16 +28,16 @@ export const SellerChat = () => {
   const [messages, setMessages] = useState([]);
   
   const {userData} = useAuthContext();
-  console.log(userData)
-  console.log(chats)
+  // console.log(userData)
+  console.log(chatDetails)
   
   // Initialize Echo
   useEffect(() => {
     window.Pusher = Pusher;
     window.Echo = new Echo({
       broadcaster: "pusher",
-      key: "53d173aa395db1ed5052",
-      cluster: "mt1",
+      key: "18468045d5c2298cb019",
+      cluster: "ap2",
       forceTLS: true,
     });
 
@@ -52,13 +53,16 @@ export const SellerChat = () => {
         const response = await axios.get(
           `https://api.lot24.ma/api/get/chats/id/${userData?.id}`
         );
-        console.log(response.data)
-        setChats(response.data)
+        console.log(response.data);
+        
+        // Store chats and buyer accounts in state
+        setChats(response.data.chats);
+        setInfo(response.data.buyer_accounts); // Store buyer accounts
       } catch (error) {
         console.error("Error fetching chats:", error.response?.data || error.message);
       }
     };
-
+  
     if (userData?.id) {
       fetchChatId();
     }
@@ -149,53 +153,68 @@ useEffect(() =>{
 
   }, [chatDetails?.buyer_id]);
 
+  const getBuyerInfo = (buyerId) => {
+    return info.find((account) => account.id === buyerId);
+  };
+
   // Open a specific chat by navigating to the seller's chat page
   const openChat = (chat) => {
-    navigate(`/seller/chat/${chat?.buyer_id}`);
+    // Find buyer's information based on buyer_id
+    const buyer = getBuyerInfo(chat?.buyer_id);
+  
+    // If buyer information is found, include the buyer's name in the URL
+    if (buyer) {
+      navigate(`/seller/chat/${chat?.buyer_id}/${buyer?.name}-${buyer?.surname}`);
+    } else {
+      // If no buyer information, just navigate with the buyer_id
+      navigate(`/seller/chat/${chat?.buyer_id}`);
+    }
   };
+  
 
   return (
     <div className="flex h-screen w-full">
+      <WhatsAppButton/>
       {/* Sidebar Section */}
       <div className="w-1/3 border-r p-4">
         <h2 className="font-bold text-lg mb-4">Active Chats</h2>
         <ul className="flex flex-col gap-2">
-          {chats.length > 0 ? (
-            chats.map((chat) => (
-              <li
-                key={chat.id}
-                onClick={() => openChat(chat)}
-                className={`flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 ${
-                  chat?.buyer_id
-                    ? "bg-gray-300"
-                    : "bg-gray-200"
-                }`}
-              >
-                <img
-                  src="https://via.placeholder.com/40"
-                  alt={`Seller ${chat.buyer_id}`}
-                  className="w-10 h-10 rounded-full"
-                />
-                <span>Chat with Buyer : {chat.buyer_id}</span>
-              </li>
-            ))
-          ) : (
-            <p className="text-gray-500">No active chats found.</p>
-          )}
-        </ul>
+      {chats.length > 0 ? (
+        chats.map((chat) => {
+          const buyer = getBuyerInfo(chat.buyer_id); // Get buyer details
+          return (
+            <li
+              key={chat.id}
+              onClick={() => openChat(chat)}
+              className={`flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 ${
+                chat?.buyer_id ? "bg-gray-300" : "bg-gray-200"
+              }`}
+            >
+              <img
+                src="https://via.placeholder.com/40"
+                alt={`Buyer ${chat.buyer_id}`}
+                className="w-10 h-10 rounded-full"
+              />
+              <span>Chat with {buyer ? `${buyer.name} ${buyer.surname}` : `Buyer ID: ${chat.buyer_id}`}</span>
+            </li>
+          );
+        })
+      ) : (
+        <p className="text-gray-500">No active chats found.</p>
+      )}
+    </ul>
       </div>
 
       {/* Chat Screen Section */}
-      <div className="w-2/3 flex flex-col">
+      {/* <div className="w-2/3 flex flex-col">
         {userData?.id ? (
           <>
             <div className="flex items-center border-b p-4">
               <h2 className="font-bold text-lg ml-4">
-                Chat with Buyer ID: {chatDetails?.buyer_id}
+                Chat with Buyer: {chatDetails?.name}
               </h2>
             </div>
 
-            {/* Messages Display */}
             <div className="flex-grow overflow-y-auto p-4 bg-gray-50">
               {messages.length > 0 ? (
                 messages.map((msg) => (
@@ -218,7 +237,6 @@ useEffect(() =>{
               )}
             </div>
 
-            {/* Message Input */}
             <div className="border-t p-4 flex items-center">
               <input
                 type="text"
@@ -243,7 +261,7 @@ useEffect(() =>{
         ) : (
           <p className="text-center text-gray-500 mt-8">Select a user to start chatting.</p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

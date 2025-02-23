@@ -9,6 +9,8 @@ import Product_component from "./pageComponents/Product_component";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SideBarCategories from "../components/SideBarCategories";
 import FilterDisplay from "../components/FilterDisplay";
+import CategoryProducts from "../components/CategoryProducts";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 const Products = () => {
   const [searchParams] = useSearchParams();
@@ -21,14 +23,16 @@ const Products = () => {
       const response = await axios.get(
         `https://api.lot24.ma/api/search/category/${categoryId}`
       );
-      console.log(response.data.data.products)
-      setProducts(response.data.data.products);
+      const productList = response.data?.data?.products || []; // Safely access products
+      setProducts(productList);
     } catch (error) {
       console.error("Error fetching products:", error.response?.data || error.message);
+      setProducts([]); // Ensure products is never undefined
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (categoryId) {
@@ -41,9 +45,10 @@ const Products = () => {
   return (
     <>
       <TopNavbar />
+      <WhatsAppButton/>
       <div className="px-8 py-8 md:px-0 bg-gray-200">
         <div className="container mx-auto  max-w-[1280px]">
-          <Breadcrumbs items={product_breadcrumbItems} />
+          {/* <Breadcrumbs items={product_breadcrumbItems} /> */}
           <div className="my-4 md:flex md:items-center md:justify-between">
             <div className="pr-3 mt-2">
               <h1 className="text-3xl font-bold">
@@ -54,16 +59,16 @@ const Products = () => {
         </div>
       </div>
       <div className="container max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 md:px-0">
-        <SideBarCategories />
-        <div className="lg:col-span-9">
+        {/* <SideBarCategories /> */}
+        <div className="lg:col-span-12">
           {/* <FilterDisplay /> */}
           {loading ? (
             <p>Loading...</p>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 my-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 my-4">
               {products.map((product, index) => (
                 <div key={index} className="shadow">
-                  <Product_component product={product} />
+                  <CategoryProducts product={product} />
                 </div>
               ))}
             </div>

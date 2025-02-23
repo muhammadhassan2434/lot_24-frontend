@@ -22,6 +22,11 @@ export const authSellerProducts = async (sellerId) => {
 };
 
 
+export const searchProducts = async (searchTerm) => {
+  return await apiCall(`${API_ENDPOINTS.PRODUCT.SEARCH_PRODUCT}${searchTerm}`, "GET");
+};
+
+
 export const getCategories = async () => {
   return await apiCall(API_ENDPOINTS.PRODUCT.GET_Catrgory, "GET");
 };
@@ -51,4 +56,26 @@ export const topBar = async() => {
 export const getBlogs = async() => {
   return apiCall(API_ENDPOINTS.PUBLIC.getBlogs, "GET",);
 }
+export const getSocialMedia = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getSocialMedia, "GET",);
+}
+
+
+export const getTermsAndCondition = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getTermsAndCondition, "GET",);
+}
+export const getRefundPolicy = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getRefundPolicy, "GET",);
+}
+export const getPrivacyPolicy = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getPrivacyPolicy, "GET",);
+}
+export const getAboutUs = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getAboutUs, "GET",);
+}
+export const getContactInfo = async() => {
+  return apiCall(API_ENDPOINTS.PUBLIC.getContactInfo, "GET",);
+}
+
+
 

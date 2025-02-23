@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { CurrencyContext } from "../../hooks/CurrencyContext";
 
 const Product_component = ({
   product,
   cardHeight = "400px",
   Card2xl = "500px",
-  link = "/2/product_view",
+  link = `/${product.id}/product_view`,
 }) => {
+  const { currency, conversionRate } = useContext(CurrencyContext);
   const dynamicHeightClass = `min-h-[${cardHeight}]`;
+  const convertedPrice = (product.price * conversionRate).toFixed(2);
+  const convertRegularPrice = (product.regular_price * conversionRate).toFixed(2);
   return (
     <div className="group transition-transform duration-300 transform hover:-translate-y-3 hover:scale-105">
       <Link to={link}>
@@ -18,8 +22,8 @@ const Product_component = ({
         />
         <div className="p-2 flex gap-2 flex-col m-3">
           <p className="text-sm font-bold text-gray-500">
-            <span className="text-red-600">{product.price}</span>{" "}
-            {product.price}
+            <span className="text-red-600">{convertRegularPrice} {currency}</span>{" "}
+            <span className="line-through">{convertedPrice} {currency}</span>
           </p>
           <h1 className="hover:text-blue-500">{product.name}</h1>
           {product.negotiable && (

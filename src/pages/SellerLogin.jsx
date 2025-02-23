@@ -14,6 +14,7 @@ import { authActions } from "../store/auth";
 import { useMutation } from "@tanstack/react-query";
 import { sellerLogin } from "../utils/mutations/productMutation";
 import { useAuthContext } from "../hooks/useAuthContext";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -68,6 +69,7 @@ const SellerLogin = () => {
   return (
     <>
       <TopNavbar />
+      <WhatsAppButton/>
       <ToastContainer /> {/* Toastify container to render notifications */}
       <div className="w-full py-[100px] bg-gray-100 flex items-center justify-center">
         <div className="form-can bg-white min-w-[300px] p-4 shadow rounded">

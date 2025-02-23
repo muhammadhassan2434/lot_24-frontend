@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const RightSideBarForm = () => {
+  const { t, i18n } = useTranslation();
   return (
     <>
       <div className="p-6 border bg-gray-50 md:col-span-4 order-1 md:order-2">
-        <h1 className="text-xl font-bold text-yellow  ">PREMIUM</h1>
+        {/* <h1 className="text-xl font-bold text-yellow  ">PREMIUM</h1>
         <h2 className="text-sm line-through text-gray-400  ">
           EUR 279.00 +VAT -20%
         </h2>
@@ -14,41 +16,25 @@ const RightSideBarForm = () => {
         <p className="text-sm mt-2 text-gray-400">
           These are net prices, which are subject to VAT rate in line with EU
           directive.
-        </p>
+        </p> */}
         <ul className="flex flex-col gap-4 mt-5">
           {[
-            { description: "Access to the opinions about the wholesalers" },
+            { description:  t("register.register6"),},
             {
               description:
-                "Posting offers - after positive company verification",
+              t("register.register7")
             },
-            { description: "Access to the blacklist of wholesalers" },
+            { description: t("register.register8")},
             {
               description:
-                "Listing your company in Merkandi international catalogue",
+              t("register.register9"),
             },
-            { description: "Unlimited number of inquiries to send" },
+            { description: t("register.register10") },
             {
               description:
-                "Advanced statistics of your offers and your company's profile views",
+              t("register.register11")
             },
-            { description: "Access to the wholesalers' contact details" },
-            { description: "Import/Export offers to CSV, XLS, XML files" },
-            { description: "Daily newsletter with the latest offers" },
-            { description: "Promoting your offers all across Europe" },
-            {
-              description:
-                "Offers from 150 countries, up to 90% off regular prices",
-            },
-            {
-              description:
-                "Automatic translation of your offers into 26 languages",
-            },
-            {
-              description:
-                "An account to manage your settings, contacts and offers",
-            },
-            { description: "Access to the course 'Trade Path to Success'" },
+            { description: t("register.register2") },
           ].map((desc, index) => {
             return (
               <li className="flex items-center gap-2 text-sm  ">

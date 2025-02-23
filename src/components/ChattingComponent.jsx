@@ -23,8 +23,8 @@ const ChattingComponent = () => {
     window.Pusher = Pusher;
     window.Echo = new Echo({
       broadcaster: "pusher",
-      key: "53d173aa395db1ed5052",
-      cluster: "mt1",
+      key: "18468045d5c2298cb019",
+      cluster: "ap2",
       forceTLS: true,
     });
   }, []);
@@ -36,46 +36,27 @@ const ChattingComponent = () => {
         const response = await axios.get(
           `https://api.lot24.ma/api/buyer/chats/${userData?.id}`
         );
-        setChats(response.data);
+  
+        // Map seller details into chats
+        const { chats, seller_accounts } = response.data;
+        const chatsWithSellers = chats.map((chat) => {
+          const seller = seller_accounts.find(
+            (seller) => seller.id === chat.seller_id
+          );
+          return { ...chat, seller };
+        });
+  
+        setChats(chatsWithSellers);
       } catch (error) {
         console.error("Error fetching chats:", error.response?.data || error.message);
       }
     };
-
+  
     fetchChats();
   }, [userData?.id]);
   
-  // useEffect(() => {
-  //   const fetchChats = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://127.0.0.1:8000/api/buyer/chats/${userData?.id}`
-  //       );
-  //       setChats(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching chats:", error.response?.data || error.message);
-  //     }
-  //   };
-
-  //   fetchChats();
-  // }, [userData?.id]);
   
-  // useEffect(() => {
-  //   const getInfo = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://127.0.0.1:8000/api/get/account/info/${userData?.id}`
-  //       );
-
-  //       // console.log(response.data)
-  //       setAccountInfo(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching chats:", error.response?.data || error.message);
-  //     }
-  //   };
-
-  //   getInfo();
-  // }, [userData?.id]);
+ 
 
   // Start or fetch chat messages
   useEffect(() => {
@@ -152,35 +133,44 @@ const ChattingComponent = () => {
 
   // Navigate to a selected chat
   const openChat = (chat) => {
-    navigate(`/chat/${chat.seller_id}`);
+    navigate(`/chat/${chat.seller_id}`, {
+      state: { sellerName: `${chat.seller?.name || "Seller"} ${chat.seller?.surname || ""}` },
+    });
   };
+  
+  
 
   return (
     <div className="flex h-screen w-full">
       <div className="w-1/3 border-r p-4">
         <h2 className="font-bold text-lg mb-4">Users</h2>
         <ul className="flex flex-col gap-2">
-          {chats.length > 0 ? (
-            chats.map((chat) => (
-              <li
-                key={chat.id}
-                onClick={() => openChat(chat)}
-                className={`flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 ${
-                  chat.seller_id.toString() === sellerId ? "bg-gray-300" : "bg-gray-200"
-                }`}
-              >
-                <img
-                  src="https://via.placeholder.com/40"
-                  alt={`Seller ${chat.seller_id}`}
-                  className="w-10 h-10 rounded-full"
-                />
-                <span>Chat with Seller ID: {chat.seller_id}</span>
-              </li>
-            ))
-          ) : (
-            <p className="text-gray-500">No active chats found.</p>
-          )}
-        </ul>
+  {chats.length > 0 ? (
+    chats.map((chat) => (
+      <li
+        key={chat.id}
+        onClick={() => openChat(chat)}
+        className={`flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 ${
+          chat.seller_id.toString() === sellerId ? "bg-gray-300" : "bg-gray-200"
+        }`}
+      >
+        <img
+          src={chat.seller?.profile_picture || "https://via.placeholder.com/40"}
+          alt={`${chat.seller?.name || "Seller"}`}
+          className="w-10 h-10 rounded-full"
+        />
+        <span>
+          {chat.seller
+            ? `${chat.seller.name} ${chat.seller.surname}`
+            : `Seller ID: ${chat.seller_id}`}
+        </span>
+      </li>
+    ))
+  ) : (
+    <p className="text-gray-500">No active chats found.</p>
+  )}
+</ul>
+
       </div>
 
       <div className="w-2/3 flex flex-col">

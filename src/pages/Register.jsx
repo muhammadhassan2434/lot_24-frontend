@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import sale_img from "../assets/images/desktop_small.jpg";
 import store from "../assets/images/register-1.jpg";
 import Footer from "../components/Footer/Footer";
@@ -7,7 +7,12 @@ import RegisterTopNavBar from "./pageComponents/RegisterTopNavBar";
 import thumb_up from "../assets/images/ratings-and-thumb-green.svg";
 import Faqs from "../components/Faqs";
 import FlashSales from "../components/FlashSales";
+import { useTranslation } from "react-i18next";
+import { CurrencyContext } from "../hooks/CurrencyContext";
+import WhatsAppButton from "../components/WhatsAppButton";
 const Register = () => {
+  const { t, i18n } = useTranslation();
+   const { currency, conversionRate } = useContext(CurrencyContext);
   const [activeFaq, setActiveFaq] = useState(null);
 
   const toggleFaq = (index) => {
@@ -32,7 +37,7 @@ const Register = () => {
       try {
         const response = await fetch("https://api.lot24.ma/api/show-subscription");
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setSubscriptions(data.data); // Assuming the API response is an array of subscriptions
       } catch (error) {
         console.error("Error fetching subscriptions:", error);
@@ -41,10 +46,13 @@ const Register = () => {
 
     fetchSubscriptions();
   }, []);
+  const subscriptionActualPice = (subscriptions.Actual_Price * conversionRate).toFixed(2);
+      const subscriptionDiscountPrice = (subscriptions.regular_price * conversionRate).toFixed(2);
 
   return (
     <>
       <RegisterTopNavBar top_sale={top_sale} />
+      <WhatsAppButton/>
 
       {/* Flash Sale */}
       <FlashSales />
@@ -55,36 +63,40 @@ const Register = () => {
           <div className="col-span-1 text-center flex items-center justify-center flex-col">
             <img src={thumb_up} alt="likes" className="w-[50%]" />
             <div className="text-green-500 font-bold text-xl  ">
-              99.9% satisfied sellers
+            { t("register.register6")}
             </div>
             <p className="text-gray-500 text-sm  ">
-              Our customers confidently buy from all over the world
+            { t("register.register7")}
             </p>
           </div>
           {subscriptions.length > 0 ? (
-            subscriptions.map((subscription, index) => (
-              <div
-                key={index}
-                className="text-center border-l border-r p-4 flex items-center justify-center flex-col"
-              >
-                <h3 className="text-xl font-bold text-gray-800">
-                  {subscription.plan_name}
-                </h3>
-                <p className="line-through text-gray-500">
-                  EUR {subscription.Actual_Price}
-                </p>
-                <p className="text-red-500 text-center md:text-start md:text-2xl font-semibold">
-                  EUR {subscription.Discount_Price}{" "}
-                  <span className="text-sm">+ VAT / year</span>
-                </p>
-                <Link to={`/register/form?subscriptionId=${subscription.id}`}>
-  <button className="mt-4 bg-yellow-500 text-white py-2 px-6 rounded-lg">
-    REGISTER
-  </button>
-</Link>
-
-              </div>
-            ))
+            subscriptions.map((subscription, index) => {
+              const subscriptionActualPrice = (subscription.Actual_Price * conversionRate).toFixed(2);
+              const subscriptionDiscountPrice = (subscription.Discount_Price * conversionRate).toFixed(2);
+              
+              return (
+                <div
+                  key={index}
+                  className="text-center border-l border-r p-4 flex items-center justify-center flex-col"
+                >
+                  <h3 className="text-xl font-bold text-gray-800">
+                    {subscription.plan_name}
+                  </h3>
+                  <p className="line-through text-gray-500">
+                    {currency} {subscriptionActualPrice}
+                  </p>
+                  <p className="text-red-500 text-center md:text-start md:text-2xl font-semibold">
+                    {currency} {subscriptionDiscountPrice}{" "}
+                    <span className="text-sm">+ VAT / year</span>
+                  </p>
+                  <Link to={`/register/form?subscriptionId=${subscription.id}`}>
+                    <button className="mt-4 bg-yellow-500 text-white py-2 px-6 rounded-lg">
+                      REGISTER
+                    </button>
+                  </Link>
+                </div>
+              );
+            })
           ) : (
             <p>Loading subscriptions...</p>
           )}
@@ -93,31 +105,31 @@ const Register = () => {
         {/* Table Details */}
         <div className="grid grid-cols-3 text-center  ">
           <div className="py-4 px-6 bg-gray-100 text-gray-600 font-semibold text-left">
-            Access period
+          { t("register.register8")}
           </div>
           <div className="py-4 px-6">✓</div>
           <div className="py-4 px-6">✓</div>
 
           <div className="py-4 px-6 bg-gray-100 text-gray-600 font-semibold text-left">
-            Unlimited number of inquiries to send
+          { t("register.register9")}
           </div>
           <div className="py-4 px-6">✓</div>
           <div className="py-4 px-6">✓</div>
 
           <div className="py-4 px-6 bg-gray-100 text-gray-600 font-semibold text-left">
-            Daily newsletter with latest offers
+          { t("register.register10")}
           </div>
           <div className="py-4 px-6">✓</div>
           <div className="py-4 px-6">✓</div>
 
           <div className="py-4 px-6 bg-gray-100 text-gray-600 font-semibold text-left">
-            Access to special offers up to 50%
+          { t("register.register11")}
           </div>
           <div className="py-4 px-6">✓</div>
           <div className="py-4 px-6">✓</div>
 
           <div className="py-4 px-6 bg-gray-100 text-gray-600 font-semibold text-left">
-            Extensive database of shopping wholesalers
+          { t("register.register12")}
           </div>
           <div className="py-4 px-6">✗</div>
           <div className="py-4 px-6">✓</div>
