@@ -19,6 +19,11 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
           header8: "Wholesaler's data",
           header9: "View Details",
           header10: "Related Search",
+          header11: "For one-year REGISTRATION and RENEWAL",
+          header12: "promotions cannot be combined",
+          header13: "Number of remaining packages",
+          header14: "Register",
+          header15: "FLash Sale",
         },
         topbar: {
           top1: "The best stocklot offers from 150 countries",
