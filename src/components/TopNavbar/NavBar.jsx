@@ -77,10 +77,10 @@ const NavBar = () => {
       <div className="container mx-auto lg:flex justify-between items-center max-w-[1280px]">
         <div className="flex items-center gap-6">
           <Link className="block px-4 py-2 text-white " to="/register">
-            Buyer Registration
+          {t("header.header16")}
           </Link>
           <Link className="block px-4 py-2 text-white " to="/register">
-            Seller Registration
+          {t("header.header17")}
           </Link>
           {userData?.role === "buyer" && (
             <div
@@ -92,7 +92,7 @@ const NavBar = () => {
                 className="text-white py-2 px-4 focus:outline-none"
                 onClick={() => toggleDropdown("buyer")}
               >
-                Buyer Dashboard
+                {t("header.header19")}
               </button>
               {dropdowns.buyer && (
                 <ul className="absolute left-0 overflow-hidden w-48 bg-white rounded-md shadow-lg z-10">
@@ -101,7 +101,7 @@ const NavBar = () => {
                       className="block px-4 py-2 hover:bg-gray-300"
                       to="/buyer"
                     >
-                      Buyer dashboard
+                      {t("header.header19")}
                     </Link>
                   </li>
                   <li>

@@ -54,32 +54,32 @@ const Footer = () => {
 
           {/* Information Links */}
           <div className="w-[45%] md:w-1/6">
-            <h3 className="text-lg font-semibold mb-2">Information</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("footer.footer2")}</h3>
             <ul className="text-sm space-y-1 ">
             <li className="text-stone-400 hover:text-white hover:underline">
-                <Link to="/conditions">Terms and Conditions</Link>
+                <Link to="/conditions">{t("footer.footer3")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
-              <Link to="/privacy/policy">Privacy Policy</Link>
+              <Link to="/privacy/policy">{t("footer.footer4")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
               {/* <Link to="#">Cookie files policy</Link> */}
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
-              <Link to="/refund/policy">Refund policy</Link>
+              <Link to="/refund/policy">{t("footer.footer5")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
-              <Link to="/aboutus">About us</Link>
+              <Link to="/aboutus">{t("footer.footer6")}</Link>
               </li>
             </ul>
           </div>
 
           {/* Help Links */}
           <div className="w-[45%] md:w-1/6">
-            <h3 className="text-lg font-semibold mb-2">Help</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("footer.footer7")}</h3>
             <ul className="text-sm space-y-1">
               <li className="text-stone-400 hover:text-white hover:underline">
-                <Link to="/faq">FAQ</Link>
+                <Link to="/faq">{t("footer.footer8")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
                 {/* <Link to="/contact">Contact</Link> */}
@@ -88,23 +88,23 @@ const Footer = () => {
                 <Link to="#">Sitemap</Link>
               </li> */}
               <li className="text-stone-400 hover:text-white hover:underline">
-                <Link to="/login">For buyers</Link>
+                <Link to="/login">{t("footer.footer9")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
-                <Link to="/seller/login">For sellers</Link>
+                <Link to="/seller/login">{t("footer.footer10")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
-                <Link to="/blogs">Blog</Link>
+                <Link to="/blogs">{t("footer.footer11")}</Link>
               </li>
               <li className="text-stone-400 hover:text-white hover:underline">
-                <Link to="/contact">Contact us </Link>
+                <Link to="/contact">{t("footer.footer12")}</Link>
               </li>
             </ul>
           </div>
 
           {/* Social MediLink Links */}
           <div className="w-[45%] md:w-1/6">
-  <h3 className="text-lg font-semibold mb-2">Social Media</h3>
+  <h3 className="text-lg font-semibold mb-2">{t("footer.footer13")}</h3>
   {loadingSocialMedia && <p>Loading...</p>}
   {errorSocialMedia && <p>Error loading social media links.</p>}
   {socailMedia?.length > 0 ? (
@@ -146,19 +146,14 @@ const Footer = () => {
         {/* Footer Bottom */}
         <div className="container mx-auto text-center text-xs mt-8 border-t border-gray-700 pt-4">
           <p className="">
-            Lot24 Ltd Unit 4E, Enterprise Court, S63 5DB Rotherham, United
-            Kingdom, VAT Number: GB 254632212 , Company number: 09582404
+          {t("footer.footer14")}
           </p>
           <p className="mt-2">
-            &copy; 2008 - 2024 Lot24. All rights reserved. All trademarks and
-            brands used on this site belong to the owner of the website and are
-            used for information purposes only. The use of this website
-            constitutes acceptance of the terms of the contract, and the general
-            terms and conditions.
+            &copy; {t("footer.footer15")}
           </p>
-          <Link to="#" className="text-blue-500 hover:underline inline-block">
+          {/* <Link to="#" className="text-blue-500 hover:underline inline-block">
             Cookies settings
-          </Link>
+          </Link> */}
         </div>
       </div>
       </div>

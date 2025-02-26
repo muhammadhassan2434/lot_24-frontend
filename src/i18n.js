@@ -94,7 +94,25 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
           faq8:"Yes, buyers can initiate returns if the product does not meet their expectations. Review our return policy for details.",
           faq9:"How do sellers get paid?",
           faq10:"Sellers receive payments through their preferred payment method after each successful transaction.",
+        },
+        footer:{
+          footer1:"Hello",
+          footer2:"Information",
+          footer3:"Terms and Conditions",
+          footer4:"Privacy Policy",
+          footer5:"Refund policy",
+          footer6:"About us",
+          footer7:"Help",
+          footer8:"FAQ",
+          footer9:"For buyers",
+          footer10:"For sellers",
+          footer11:"Blog",
+          footer12:"Contact us",
+          footer13:"Social Media",
+          footer14:" Lot24 Ltd Unit 4E, Enterprise Court, S63 5DB Rotherham, United Kingdom, VAT Number: GB 254632212 , Company number: 09582404",
+          footer15:"2008 - 2024 Lot24. All rights reserved. All trademarks and brands used on this site belong to the owner of the website and are used for information purposes only. The use of this website constitutes acceptance of the terms of the contract, and the general terms and conditions.",
         }
+
 
       },
     },
@@ -186,9 +204,24 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
           faq8: "Ja, Käufer können eine Rückgabe initiieren, wenn das Produkt nicht ihren Erwartungen entspricht. Überprüfen Sie unsere Rückgabebedingungen für weitere Details.",
           faq9: "Wie werden Verkäufer bezahlt?",
           faq10: "Verkäufer erhalten Zahlungen über ihre bevorzugte Zahlungsmethode nach jedem erfolgreichen Geschäft."
-        }
-        
-        
+        },
+        footer: {
+          footer1: "Hallo",
+          footer2: "Informationen",
+          footer3: "Geschäftsbedingungen",
+          footer4: "Datenschutzrichtlinie",
+          footer5: "Rückerstattungsrichtlinie",
+          footer6: "Über uns",
+          footer7: "Hilfe",
+          footer8: "FAQ",
+          footer9: "Für Käufer",
+          footer10: "Für Verkäufer",
+          footer11: "Blog",
+          footer12: "Kontakt",
+          footer13: "Soziale Medien",
+          footer14: "Lot24 Ltd, Einheit 4E, Enterprise Court, S63 5DB Rotherham, Vereinigtes Königreich, USt-Nummer: GB 254632212, Unternehmensnummer: 09582404",
+          footer15: "2008 - 2024 Lot24. Alle Rechte vorbehalten. Alle auf dieser Website verwendeten Marken und Marken gehören dem Eigentümer der Website und werden nur zu Informationszwecken verwendet. Die Nutzung dieser Website bedeutet die Zustimmung zu den Vertragsbedingungen und den allgemeinen Geschäftsbedingungen.",
+        }   
       },
     },
     es: {
@@ -279,6 +312,24 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
             faq9: "¿Cómo reciben los vendedores el pago?",
             faq10: "Los vendedores reciben los pagos a través de su método de pago preferido después de cada transacción exitosa."
           }
+          ,footer: {
+            footer1: "Hola",
+            footer2: "Información",
+            footer3: "Términos y Condiciones",
+            footer4: "Política de Privacidad",
+            footer5: "Política de Reembolsos",
+            footer6: "Sobre Nosotros",
+            footer7: "Ayuda",
+            footer8: "Preguntas Frecuentes",
+            footer9: "Para Compradores",
+            footer10: "Para Vendedores",
+            footer11: "Blog",
+            footer12: "Contáctanos",
+            footer13: "Redes Sociales",
+            footer14: "Lot24 Ltd, Unidad 4E, Enterprise Court, S63 5DB Rotherham, Reino Unido, Número de IVA: GB 254632212, Número de empresa: 09582404",
+            footer15: "2008 - 2024 Lot24. Todos los derechos reservados. Todas las marcas y nombres comerciales utilizados en este sitio pertenecen al propietario del sitio web y se utilizan únicamente con fines informativos. El uso de este sitio web implica la aceptación de los términos del contrato y las condiciones generales.",
+           
+          }
           
           
         },
@@ -358,8 +409,25 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
   register19: "直接沟通",
   register20: "公司信息",
   register21: "我特此同意根据个人数据保护法处理我的个人数据，以便执行该申请。"
-          }
-          
+          },
+          footer: {
+            footer1: "你好",
+            footer2: "信息",
+            footer3: "条款和条件",
+            footer4: "隐私政策",
+            footer5: "退款政策",
+            footer6: "关于我们",
+            footer7: "帮助",
+            footer8: "常见问题",
+            footer9: "买家专用",
+            footer10: "卖家专用",
+            footer11: "博客",
+            footer12: "联系我们",
+            footer13: "社交媒体",
+            footer14: "Lot24 Ltd, Unit 4E, Enterprise Court, S63 5DB Rotherham, 英国, 增值税号: GB 254632212, 公司编号: 09582404",
+            footer15: "2008 - 2024 Lot24. 版权所有。 本网站使用的所有商标和品牌均属于网站所有者，仅用于信息目的。 使用本网站即表示接受合同条款和一般条款和条件。",
+           
+          }             
         },
       },
       tr: {
@@ -450,7 +518,26 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
             faq8: "是的，如果产品不符合买家的预期，买家可以申请退货。请查看我们的退货政策了解详细信息。",
             faq9: "卖家如何收到付款？",
             faq10: "卖家在每次成功交易后，通过他们偏好的支付方式收到付款。"
+          },
+          footer: {
+            footer1: "Merhaba",
+            footer2: "Bilgi",
+            footer3: "Şartlar ve Koşullar",
+            footer4: "Gizlilik Politikası",
+            footer5: "İade Politikası",
+            footer6: "Hakkımızda",
+            footer7: "Yardım",
+            footer8: "SSS",
+            footer9: "Alıcılar için",
+            footer10: "Satıcılar için",
+            footer11: "Blog",
+            footer12: "Bize Ulaşın",
+            footer13: "Sosyal Medya",
+            footer14: "Lot24 Ltd, Unit 4E, Enterprise Court, S63 5DB Rotherham, Birleşik Krallık, KDV Numarası: GB 254632212, Şirket Numarası: 09582404",
+            footer15: "2008 - 2024 Lot24. Tüm hakları saklıdır. Bu sitede kullanılan tüm ticari markalar ve markalar, web sitesi sahibine aittir ve yalnızca bilgilendirme amacıyla kullanılmaktadır. Bu web sitesinin kullanımı, sözleşme şartlarının ve genel hüküm ve koşulların kabul edildiği anlamına gelir.",
+           
           }
+          
           
           
         },
@@ -543,10 +630,25 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
             faq8: "نعم، يمكن للمشترين بدء عملية الإرجاع إذا لم يكن المنتج كما توقعوا. راجع سياسة الإرجاع لدينا لمزيد من التفاصيل.",
             faq9: "كيف يتقاضى البائعون المدفوعات؟",
             faq10: "يتلقى البائعون المدفوعات من خلال طريقة الدفع المفضلة لديهم بعد كل عملية بيع ناجحة."
-          }
-,
-
-
+          },
+          footer: {
+            footer1: "مرحبًا",
+            footer2: "معلومات",
+            footer3: "الشروط والأحكام",
+            footer4: "سياسة الخصوصية",
+            footer5: "سياسة الاسترداد",
+            footer6: "معلومات عنا",
+            footer7: "مساعدة",
+            footer8: "الأسئلة الشائعة",
+            footer9: "للمشترين",
+            footer10: "للبائعين",
+            footer11: "مدونة",
+            footer12: "اتصل بنا",
+            footer13: "وسائل التواصل الاجتماعي",
+            footer14: "شركة Lot24 Ltd، الوحدة 4E، Enterprise Court، S63 5DB Rotherham، المملكة المتحدة، رقم ضريبة القيمة المضافة: GB 254632212، رقم الشركة: 09582404",
+            footer15: "2008 - 2024 Lot24. جميع الحقوق محفوظة. جميع العلامات التجارية والعلامات المستخدمة على هذا الموقع مملوكة لصاحب الموقع وتستخدم لأغراض إعلامية فقط. استخدام هذا الموقع يعني قبول شروط العقد والشروط والأحكام العامة.",
+           
+          }          
           
         },
       }

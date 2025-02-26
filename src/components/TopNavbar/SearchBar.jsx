@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Link } from "react-router-dom";
 import lot24Logo from "../../assets/images/logo.png";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 
 const SearchBar = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+const { t, i18n } = useTranslation();
   console.log(searchTerm)
   console.log(searchResults)
 
@@ -71,7 +72,7 @@ const SearchBar = () => {
               <img
                 src={lot24Logo}
                 alt="lot 24"
-                className="w-[100px] md:w-[150px] h-[160px]" // Adjust sizes as needed
+                className="w-[100px] md:w-[110px] h-[170px]" // Adjust sizes as needed
               />
             </Link>
           </div>
@@ -85,7 +86,7 @@ const SearchBar = () => {
                   onClick={handleLogout}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg"
                 >
-                  Logout
+                  {t("header.header23")}
                 </button>
               ) : (
                 // Show login/register section if token is not present
@@ -95,11 +96,11 @@ const SearchBar = () => {
                     <h4 className="text-sm">Hello!</h4>
                     <h6 className="flex items-center gap-1 text-sm">
                       <Link to="/login" className="text-[#299BCC]">
-                        Login
+                      {t("header.header22")}
                       </Link>{" "}
                       |{" "}
                       <Link to="/register" className="text-red-500">
-                        Create a new account
+                      {t("header.header24")}
                       </Link>
                     </h6>
                   </div>
@@ -142,21 +143,21 @@ const SearchBar = () => {
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg"
               >
-                Logout
+                {t("header.header23")}
               </button>
             ) : (
               // Show login/register section if token is not present
               <div className="flex items-center gap-2 2xl:gap-4">
                 <i className="fa-regular fa-circle-user text-[40px] text-[#299BCC]"></i>
                 <div>
-                  <h4 className="text-sm">Hello!</h4>
+                  <h4 className="text-sm">{t("footer.footer1")}!</h4>
                   <h6 className="flex items-center gap-2 2xl:gap-4 text-sm">
                     <Link to="/login" className="text-[#299BCC]">
-                      login
+                    {t("header.header22")}
                     </Link>{" "}
                     |{" "}
                     <Link to="/login" className="text-red-500">
-                      Create Link new account
+                    {t("header.header24")}
                     </Link>
                   </h6>
                 </div>
